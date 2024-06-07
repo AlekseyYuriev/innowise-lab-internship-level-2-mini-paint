@@ -1,58 +1,45 @@
+import { getCurrentUser } from '@/services/auth'
 import { createRouter, createWebHistory } from 'vue-router'
-import type {
-  NavigationGuardNext,
-  RouteLocationNormalized,
-  RouteRecordRaw
-} from 'vue-router'
-import { onAuthStateChanged } from 'firebase/auth'
-import { auth } from '@/firebase/config'
-
-const checkAuth = (
-  to: RouteLocationNormalized,
-  from: RouteLocationNormalized,
-  next: NavigationGuardNext
-) => {
-  let isAuth = false
-
-  onAuthStateChanged(auth, (user) => {
-    if (user && !isAuth) {
-      isAuth = true
-      next()
-    } else if (!user && !isAuth) {
-      isAuth = true
-      next('/signin')
-    }
-  })
-}
+import type { RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',
     component: () => import('../views/HomeView.vue'),
-    beforeEnter: checkAuth
+    meta: { requiresAuth: true }
   },
   {
     path: '/signin',
     name: 'signin',
-    component: () => import('../views/SignIn.vue')
+    component: () => import('../views/SignIn.vue'),
+    meta: { requiresAuth: false }
   },
   {
     path: '/register',
     name: 'register',
-    component: () => import('../views/SignUp.vue')
+    component: () => import('../views/SignUp.vue'),
+    meta: { requiresAuth: false }
   },
   {
     path: '/paint',
     name: 'paint',
     component: () => import('../views/PagePaint.vue'),
-    beforeEnter: checkAuth
+    meta: { requiresAuth: true }
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: routes
+})
+
+router.beforeEach(async (to) => {
+  if (to.meta.requiresAuth && !(await getCurrentUser())) {
+    return {
+      path: '/signin'
+    }
+  }
 })
 
 export default router

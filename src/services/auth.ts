@@ -1,6 +1,7 @@
 import { auth } from '@/firebase/config'
 import {
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut
 } from 'firebase/auth'
@@ -51,4 +52,14 @@ export const login = async (email: string, password: string): Promise<void> => {
 
 export const logout = async (): Promise<void> => {
   await signOut(auth)
+}
+
+export const getCurrentUser = () => {
+  return new Promise((resolve) => {
+    const removeListener = onAuthStateChanged(auth, (user) => {
+      console.log(user)
+      removeListener()
+      resolve(user)
+    })
+  })
 }
