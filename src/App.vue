@@ -12,9 +12,9 @@ const isLoading = ref<boolean>(true)
 onMounted(() => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      userStore.userId = user.uid
+      userStore.user = user
     } else {
-      userStore.userId = ''
+      userStore.user = null
     }
     isLoading.value = false
   })

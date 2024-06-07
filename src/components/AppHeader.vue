@@ -2,6 +2,7 @@
 import { logout } from '@/API/api'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
+import ThemeCheckbox from './ThemeCheckbox.vue'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -14,8 +15,9 @@ const handleLogout = async (): Promise<void> => {
 
 <template>
   <nav class="navbar">
+    <theme-checkbox />
     <div class="navbar__content">
-      <template v-if="!userStore.userId">
+      <template v-if="!userStore.user">
         <div class="navbar__title-wrapper">
           <h1 class="navbar__title">Welcom to Vue Paint!</h1>
         </div>
@@ -29,11 +31,10 @@ const handleLogout = async (): Promise<void> => {
             >HomePage</router-link
           >
         </div>
-
         <div class="navbar__wapper">
           <p class="navbar__text">
             Logged in as:
-            <span class="navbar__email">{{ userStore.userId }}</span>
+            <span class="navbar__email">{{ userStore.user.email }}</span>
           </p>
           <button @click="handleLogout" class="navbar__button">Log Out</button>
         </div>
@@ -50,12 +51,12 @@ const handleLogout = async (): Promise<void> => {
   margin: 0 auto;
   border-radius: 16px;
   box-shadow: 0 20px 40px #525354;
+  box-sizing: border-box;
+  padding: 10px 50px 15px;
 }
 .navbar__content {
   max-width: 762px;
   width: 100%;
-  padding: 15px 50px;
-  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -111,6 +112,7 @@ const handleLogout = async (): Promise<void> => {
 .navbar__button:not(:disabled):active {
   transform: scale(98%);
 }
+
 @media screen and (max-width: 700px) {
   .navbar__home {
     display: none;
@@ -128,16 +130,23 @@ const handleLogout = async (): Promise<void> => {
     font-size: 12px;
     padding: 0 5px;
   }
+  .navbar__title {
+    font-size: 16px;
+  }
+  .navbar__subtitle {
+    font-size: 14px;
+  }
 }
+
 @media screen and (max-width: 565px) {
   .navbar {
     max-width: 300px;
     flex-direction: column;
     gap: 0;
+    padding: 15px 20px;
   }
   .navbar__content {
     max-width: 300px;
-    padding: 15px 20px;
     display: flex;
     flex-direction: column;
   }
@@ -151,12 +160,7 @@ const handleLogout = async (): Promise<void> => {
     display: flex;
     justify-content: flex-end;
   }
-  .navbar__title {
-    font-size: 16px;
-  }
-  .navbar__subtitle {
-    font-size: 14px;
-  }
+
   .navbar__wapper {
     display: flex;
     align-items: center;
