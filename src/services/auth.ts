@@ -1,14 +1,14 @@
 import { auth } from '@/firebase/config'
 import {
-  INVALID_CREDENTIALS,
-  NO_NETWORK_CONNECTION,
-  UNEXPECTED_ERROR
-} from '@/utils/constants'
-import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut
 } from 'firebase/auth'
+import {
+  INVALID_CREDENTIALS,
+  NO_NETWORK_CONNECTION,
+  UNEXPECTED_ERROR
+} from '@/constants/errorMessage'
 
 export const register = async (
   email: string,

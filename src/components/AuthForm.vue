@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { login, register } from '@/API/api'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { login, register } from '../services/auth.ts'
 
 const props = defineProps({
   title: { type: String, required: true },

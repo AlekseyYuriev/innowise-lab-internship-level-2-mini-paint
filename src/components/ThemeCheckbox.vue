@@ -15,8 +15,7 @@
 
 <script setup lang="ts">
 const changeTheme = () => {
-  const app = document.getElementById('app')
-  app.classList.toggle('dark')
+  document.body.classList.toggle('dark')
 }
 </script>
 

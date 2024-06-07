@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { logout } from '@/API/api'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import ThemeCheckbox from './ThemeCheckbox.vue'
+import { logout } from '../services/auth.ts'
 
 const userStore = useUserStore()
 const router = useRouter()
