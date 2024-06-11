@@ -57,7 +57,6 @@ export const logout = async (): Promise<void> => {
 export const getCurrentUser = () => {
   return new Promise((resolve) => {
     const removeListener = onAuthStateChanged(auth, (user) => {
-      console.log(user)
       removeListener()
       resolve(user)
     })

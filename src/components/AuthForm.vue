@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { login, register } from '../services/auth.ts'
+import { useAuthStore } from '../stores/AuthStore'
 
 const props = defineProps({
   title: { type: String, required: true },
@@ -12,6 +12,7 @@ const props = defineProps({
 
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
 
 const email = ref<string>('')
 const password = ref<string>('')
@@ -27,9 +28,9 @@ const submitForm = async (): Promise<void> => {
 
   try {
     if (route.fullPath === '/signin') {
-      await login(email.value, password.value)
+      await authStore.loginUser(email.value, password.value)
     } else {
-      await register(email.value, password.value)
+      await authStore.registerUser(email.value, password.value)
     }
     router.push('/paint')
   } catch (err) {

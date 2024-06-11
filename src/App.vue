@@ -1,28 +1,17 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { onAuthStateChanged } from 'firebase/auth'
-import { auth } from '@/firebase/config'
-import { useUserStore } from '@/stores/user'
+import { onMounted } from 'vue'
 import AppHeader from './components/AppHeader.vue'
+import { useAuthStore } from './stores/AuthStore'
 
-const userStore = useUserStore()
-
-const isLoading = ref<boolean>(true)
+const authStore = useAuthStore()
 
 onMounted(() => {
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      userStore.user = user
-    } else {
-      userStore.user = null
-    }
-    isLoading.value = false
-  })
+  authStore.init()
 })
 </script>
 
 <template>
-  <page-loader v-if="isLoading" />
+  <page-loader v-if="!authStore.authIsReady" />
   <div v-else class="page">
     <AppHeader></AppHeader>
     <router-view></router-view>

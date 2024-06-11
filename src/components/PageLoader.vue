@@ -4,6 +4,7 @@
 
 <style scoped>
 .loader {
+  margin: 30% auto;
   width: 50px;
   aspect-ratio: 1;
   border-radius: 50%;

@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/AuthStore'
 import ThemeCheckbox from './ThemeCheckbox.vue'
-import { logout } from '../services/auth.ts'
 
-const userStore = useUserStore()
+const authStore = useAuthStore()
 const router = useRouter()
 
 const handleLogout = async (): Promise<void> => {
-  await logout()
+  await authStore.logoutUser()
   router.push('/signin')
 }
 </script>
@@ -17,7 +16,7 @@ const handleLogout = async (): Promise<void> => {
   <nav class="navbar">
     <theme-checkbox />
     <div class="navbar__content">
-      <template v-if="!userStore.user">
+      <template v-if="!authStore.user">
         <div class="navbar__title-wrapper">
           <h1 class="navbar__title">Welcom to Vue Paint!</h1>
         </div>
@@ -34,7 +33,7 @@ const handleLogout = async (): Promise<void> => {
         <div class="navbar__wapper">
           <p class="navbar__text">
             Logged in as:
-            <span class="navbar__email">{{ userStore.user.email }}</span>
+            <span class="navbar__email">{{ authStore.user.email }}</span>
           </p>
           <button @click="handleLogout" class="navbar__button">Log Out</button>
         </div>
