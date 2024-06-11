@@ -77,11 +77,11 @@ const handleLogout = async (): Promise<void> => {
   gap: 30px;
 }
 .navbar__text {
-  margin: 0;
+  margin: 0 0 0 15px;
   color: var(--color-text-main);
 }
 .navbar__email {
-  margin: 0 0 0 5px;
+  margin: 0;
   color: var(--color-text-main);
   font-weight: 600;
 }
@@ -113,6 +113,12 @@ const handleLogout = async (): Promise<void> => {
 }
 
 @media screen and (max-width: 700px) {
+  .navbar__title {
+    font-size: 18px;
+  }
+  .navbar__subtitle {
+    font-size: 16px;
+  }
   .navbar__home {
     display: none;
   }
@@ -128,12 +134,6 @@ const handleLogout = async (): Promise<void> => {
     height: 25px;
     font-size: 12px;
     padding: 0 5px;
-  }
-  .navbar__title {
-    font-size: 16px;
-  }
-  .navbar__subtitle {
-    font-size: 14px;
   }
 }
 
@@ -159,16 +159,23 @@ const handleLogout = async (): Promise<void> => {
     display: flex;
     justify-content: flex-end;
   }
-
-  .navbar__wapper {
-    display: flex;
-    align-items: center;
-    gap: 30px;
+  .navbar__title {
+    font-size: 16px;
   }
-  .navbar__text {
+  .navbar__subtitle {
     font-size: 14px;
   }
+  .navbar__wapper {
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 5px;
+  }
+  .navbar__text {
+    font-size: 11px;
+    margin: 0;
+  }
   .navbar__email {
+    font-size: 11px;
     margin: 0;
   }
 }

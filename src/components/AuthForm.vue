@@ -32,7 +32,7 @@ const submitForm = async (): Promise<void> => {
     } else {
       await authStore.registerUser(email.value, password.value)
     }
-    router.push('/paint')
+    router.push('/')
   } catch (err) {
     error.value = err.message
   } finally {
@@ -42,6 +42,7 @@ const submitForm = async (): Promise<void> => {
 </script>
 
 <template>
+  <AppHeader />
   <div class="auth">
     <div class="auth__container">
       <h1 class="auth__title">{{ props.title }}</h1>

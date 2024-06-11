@@ -6,26 +6,23 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',
-    component: () => import('../views/HomeView.vue'),
+    component: () => import('../views/PagePaint.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/signin',
     name: 'signin',
-    component: () => import('../views/SignIn.vue'),
-    meta: { requiresAuth: false }
+    component: () => import('../views/SignIn.vue')
   },
   {
     path: '/register',
     name: 'register',
-    component: () => import('../views/SignUp.vue'),
-    meta: { requiresAuth: false }
+    component: () => import('../views/SignUp.vue')
   },
   {
-    path: '/paint',
-    name: 'paint',
-    component: () => import('../views/PagePaint.vue'),
-    meta: { requiresAuth: true }
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('../views/NotFound.vue')
   }
 ]
 
@@ -35,10 +32,16 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
-  if (to.meta.requiresAuth && !(await getCurrentUser())) {
+  const authenticatedUser = await getCurrentUser()
+
+  if (to.meta.requiresAuth && !authenticatedUser) {
     return {
-      path: '/signin'
+      name: 'signin'
     }
+  }
+
+  if (authenticatedUser && (to.name === 'signin' || to.name === 'register')) {
+    return { name: 'home' }
   }
 })
 
