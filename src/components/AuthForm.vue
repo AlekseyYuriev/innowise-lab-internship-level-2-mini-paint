@@ -1,46 +1,3 @@
-<script setup lang="ts">
-import { computed, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore } from '../stores/AuthStore'
-
-const props = defineProps({
-  title: { type: String, required: true },
-  buttonText: { type: String, required: true },
-  subtitleText: { type: String, required: true },
-  linkText: { type: String, required: true }
-})
-
-const route = useRoute()
-const router = useRouter()
-const authStore = useAuthStore()
-
-const email = ref<string>('')
-const password = ref<string>('')
-const isLoading = ref<boolean>(false)
-const error = ref<string | null>(null)
-
-const handleRoute = computed<string>(() => {
-  return route.fullPath === '/signin' ? '/register' : '/signin'
-})
-
-const submitForm = async (): Promise<void> => {
-  isLoading.value = true
-
-  try {
-    if (route.fullPath === '/signin') {
-      await authStore.loginUser(email.value, password.value)
-    } else {
-      await authStore.registerUser(email.value, password.value)
-    }
-    router.push('/')
-  } catch (err) {
-    error.value = err.message
-  } finally {
-    isLoading.value = false
-  }
-}
-</script>
-
 <template>
   <AppHeader />
   <div class="auth">
@@ -93,6 +50,49 @@ const submitForm = async (): Promise<void> => {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/AuthStore'
+
+const props = defineProps({
+  title: { type: String, required: true },
+  buttonText: { type: String, required: true },
+  subtitleText: { type: String, required: true },
+  linkText: { type: String, required: true }
+})
+
+const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
+
+const email = ref<string>('')
+const password = ref<string>('')
+const isLoading = ref<boolean>(false)
+const error = ref<string | null>(null)
+
+const handleRoute = computed<string>(() => {
+  return route.fullPath === '/signin' ? '/register' : '/signin'
+})
+
+const submitForm = async (): Promise<void> => {
+  isLoading.value = true
+
+  try {
+    if (route.fullPath === '/signin') {
+      await authStore.loginUser(email.value, password.value)
+    } else {
+      await authStore.registerUser(email.value, password.value)
+    }
+    router.push('/')
+  } catch (err) {
+    error.value = err.message
+  } finally {
+    isLoading.value = false
+  }
+}
+</script>
 
 <style scoped>
 .auth {

@@ -1,3 +1,10 @@
+<template>
+  <page-loader v-if="!authStore.authIsReady" />
+  <div v-else class="page">
+    <router-view></router-view>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useAuthStore } from './stores/AuthStore'
@@ -8,13 +15,6 @@ onMounted(() => {
   authStore.init()
 })
 </script>
-
-<template>
-  <page-loader v-if="!authStore.authIsReady" />
-  <div v-else class="page">
-    <router-view></router-view>
-  </div>
-</template>
 
 <style scoped>
 .page {

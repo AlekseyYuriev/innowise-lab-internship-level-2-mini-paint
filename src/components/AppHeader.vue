@@ -1,17 +1,3 @@
-<script setup lang="ts">
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/AuthStore'
-import ThemeCheckbox from './ThemeCheckbox.vue'
-
-const authStore = useAuthStore()
-const router = useRouter()
-
-const handleLogout = async (): Promise<void> => {
-  await authStore.logoutUser()
-  router.push('/signin')
-}
-</script>
-
 <template>
   <nav class="navbar">
     <theme-checkbox />
@@ -41,6 +27,20 @@ const handleLogout = async (): Promise<void> => {
     </div>
   </nav>
 </template>
+
+<script setup lang="ts">
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/AuthStore'
+import ThemeCheckbox from './ThemeCheckbox.vue'
+
+const authStore = useAuthStore()
+const router = useRouter()
+
+const handleLogout = async (): Promise<void> => {
+  await authStore.logoutUser()
+  router.push('/signin')
+}
+</script>
 
 <style scoped>
 .navbar {
@@ -128,9 +128,10 @@ const handleLogout = async (): Promise<void> => {
   }
   .navbar__text {
     width: 100%;
+    margin: 0;
   }
   .navbar__button {
-    width: 80px;
+    width: 100px;
     height: 25px;
     font-size: 12px;
     padding: 0 5px;
@@ -139,13 +140,11 @@ const handleLogout = async (): Promise<void> => {
 
 @media screen and (max-width: 565px) {
   .navbar {
-    max-width: 300px;
     flex-direction: column;
     gap: 0;
     padding: 15px 20px;
   }
   .navbar__content {
-    max-width: 300px;
     display: flex;
     flex-direction: column;
   }
@@ -166,17 +165,21 @@ const handleLogout = async (): Promise<void> => {
     font-size: 14px;
   }
   .navbar__wapper {
+    width: 100%;
     flex-direction: column-reverse;
     align-items: flex-end;
     gap: 5px;
   }
   .navbar__text {
-    font-size: 11px;
+    font-size: 12px;
     margin: 0;
   }
   .navbar__email {
-    font-size: 11px;
+    font-size: 12px;
     margin: 0;
+  }
+  .navbar__button {
+    width: 80px;
   }
 }
 </style>

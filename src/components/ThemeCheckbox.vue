@@ -101,7 +101,12 @@ const changeTheme = () => {
   .filter {
     padding: 0 0 5px 0;
   }
-
+  .filter__switch {
+    margin-right: 5px;
+  }
+  .filter__checkbox-button {
+    padding-left: 35px;
+  }
   .filter__checkbox-button::before {
     left: 6.5px;
     top: 5px;

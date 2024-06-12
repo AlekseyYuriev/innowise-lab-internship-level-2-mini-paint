@@ -1,10 +1,10 @@
 <template>
   <AppHeader />
-  <div>Paint</div>
+  <mini-paint />
 </template>
 
 <script setup lang="ts">
-import AppHeader from '@/components/AppHeader.vue'
+import MiniPaint from '@/components/MiniPaint.vue'
 </script>
 
 <style scoped></style>
