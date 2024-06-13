@@ -1,82 +1,91 @@
 <template>
   <main class="main__containter">
     <div class="main__wrapper">
-      <tool-bar />
+      <tool-bar
+        @reset-canvas="clearCanvas"
+        @change-color="changeColor"
+        @change-line-width="changeLineWidth"
+        @change-tool-to-brush="changeToolToBrush"
+      />
       <div class="main__canvas">
         <canvas
           class="main__canvas-item"
           ref="canvas"
           width="720"
           height="480"
+          @mousedown.prevent="paintModel.startDrawing"
+          @mouseup.stop.prevent="paintModel.stopDrawing"
+          @mousemove.prevent="paintModel.draw"
+          @mouseout.prevent="onMouseLeave"
+          @mouseenter.prevent="onMouseEnter"
         ></canvas>
       </div>
+      <button @click="check">Check</button>
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
 import ToolBar from '@/components/ToolBar.vue'
-import { onMounted, ref } from 'vue'
-// import { useCanvasStore } from '@/stores/CanvasStore'
-
-// const canvasStore = useCanvasStore()
+import { onMounted, ref, watch } from 'vue'
+import usePaint from '@/composables/usePaint'
 
 const canvas = ref<HTMLCanvasElement | null>(null)
+
 const context = ref<CanvasRenderingContext2D | null>(null)
-const isDrawing = ref<Boolean>(false)
-// const startX = ref<number>(0)
-// const startY = ref<number>(0)
-// const points = ref<Object[]>([])
+const color = ref<string>('#000000')
+const lineWidth = ref<number>(5)
+const tool = ref<string>('rectangle')
+
+const paintModel = usePaint(canvas, context, color, lineWidth, tool)
 
 onMounted(() => {
   if (canvas.value) {
-    context.value = canvas.value.getContext('2d')
-    canvas.value.addEventListener('mouseup', mouseup)
-    canvas.value.addEventListener('mousedown', mousedown)
-    canvas.value.addEventListener('mousemove', mousemove)
+    context.value = canvas.value.getContext('2d', { willReadFrequently: true })
+    if (!context.value) return
+    context.value.strokeStyle = color.value
+    context.value.lineWidth = lineWidth.value
   }
 })
 
-function mouseup(e) {
-  isDrawing.value = false
-}
-
-function mousedown(e) {
-  if (!canvas.value) {
-    return
-  }
-  isDrawing.value = true
-
-  const rect = canvas.value.getBoundingClientRect()
-  const scaleX = canvas.value.width / rect.width
-  const scaleY = canvas.value.height / rect.height
-  context.value?.beginPath()
-  context.value?.moveTo(
-    (e.clientX - rect.left) * scaleX,
-    (e.clientY - rect.top) * scaleY
-  )
-}
-
-function mousemove(e) {
-  if (!canvas.value) {
-    return
-  }
-  if (isDrawing.value) {
-    const rect = canvas.value.getBoundingClientRect()
-    const scaleX = canvas.value.width / rect.width
-    const scaleY = canvas.value.height / rect.height
-    draw((e.clientX - rect.left) * scaleX, (e.clientY - rect.top) * scaleY)
+function clearCanvas() {
+  if (canvas.value && context.value) {
+    context.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
   }
 }
 
-function draw(x: number, y: number) {
-  if (!context.value) {
-    return
-  }
-  context.value.lineTo(x, y)
-  context.value.strokeStyle = 'rgba(0,0,0,1)'
-  context.value.stroke()
+function changeColor(newColor: string) {
+  if (!context.value) return
+  color.value = newColor
 }
+
+function changeLineWidth(newLineWidth: number) {
+  if (!context.value) return
+  lineWidth.value = newLineWidth
+}
+
+function changeToolToBrush(toolBrush: string) {
+  tool.value = toolBrush
+}
+function check() {}
+
+watch(color, (newColor) => {
+  if (newColor) {
+    color.value = newColor
+  }
+})
+
+watch(lineWidth, (newLineWidth) => {
+  if (newLineWidth) {
+    lineWidth.value = newLineWidth
+  }
+})
+
+watch(tool, (newTool) => {
+  if (newTool) {
+    tool.value = newTool
+  }
+})
 </script>
 
 <style scoped>
