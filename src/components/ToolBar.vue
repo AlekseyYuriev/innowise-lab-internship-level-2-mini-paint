@@ -7,7 +7,7 @@
         class="toolbar__button rectangle"
       ></button>
       <button class="toolbar__button circle"></button>
-      <button class="toolbar__button line"></button>
+      <button @click="changeToolToLine" class="toolbar__button line"></button>
       <button class="toolbar__button star"></button>
       <button class="toolbar__button polygon"></button>
       <div class="toolbar__button-input">
@@ -50,7 +50,8 @@ const emit = defineEmits({
   changeColor: null,
   changeLineWidth: null,
   changeToolToBrush: null,
-  changeToolToRectangle: null
+  changeToolToRectangle: null,
+  changeToolToLine: null
 })
 
 function clearCanvas() {
@@ -70,6 +71,9 @@ function changeToolToBrush() {
 }
 function changeToolToRectangle() {
   emit('changeToolToRectangle', 'rectangle')
+}
+function changeToolToLine() {
+  emit('changeToolToLine', 'line')
 }
 </script>
 

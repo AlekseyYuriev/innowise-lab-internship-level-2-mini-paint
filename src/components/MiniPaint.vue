@@ -7,6 +7,7 @@
         @change-line-width="changeLineWidth"
         @change-tool-to-brush="changeToolToBrush"
         @change-tool-to-rectangle="changeToolToRectangle"
+        @change-tool-to-line="changeToolToLine"
       />
       <div class="main__canvas">
         <canvas
@@ -31,7 +32,7 @@ import usePaint from '@/composables/usePaint'
 
 const color = ref<string>('#000000')
 const lineWidth = ref<number>(5)
-const tool = ref<string>('rectangle')
+const tool = ref<string>('brush')
 
 const { canvas, ctx, draw, stopDrawing, startDrawing } = usePaint(
   color,
@@ -57,6 +58,9 @@ function changeToolToBrush(toolBrush: string) {
   tool.value = toolBrush
 }
 function changeToolToRectangle(toolBrush: string) {
+  tool.value = toolBrush
+}
+function changeToolToLine(toolBrush: string) {
   tool.value = toolBrush
 }
 function check() {}
