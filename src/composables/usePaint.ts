@@ -129,7 +129,6 @@ export default function usePaint(
       !prevMouseY.value
     )
       return
-
     ctx.value.lineCap = 'round'
     ctx.value.lineJoin = 'round'
     const rect = canvas.value.getBoundingClientRect()
@@ -144,7 +143,9 @@ export default function usePaint(
       Math.abs(prevMouseY.value - newPositionY) / 2
         ? (prevMouseX.value - newPositionX) / 2
         : (prevMouseY.value - newPositionY) / 2
-    console.log(radius)
+
+    if (!radius) return
+
     ctx.value.beginPath()
     ctx.value.putImageData(snapShot.value, 0, 0)
     ctx.value.arc(

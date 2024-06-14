@@ -16,7 +16,7 @@
           ref="canvas"
           width="720"
           height="480"
-          @mousedown.prevent="startDrawing"
+          @mousedown.stop.prevent="startDrawing"
           @mouseup.stop.prevent="stopDrawing"
           @mousemove.prevent="draw"
         ></canvas>
