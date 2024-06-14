@@ -8,6 +8,7 @@
         @change-tool-to-brush="changeToolToBrush"
         @change-tool-to-rectangle="changeToolToRectangle"
         @change-tool-to-line="changeToolToLine"
+        @change-tool-to-circle="changeToolToCircle"
       />
       <div class="main__canvas">
         <canvas
@@ -61,6 +62,9 @@ function changeToolToRectangle(toolBrush: string) {
   tool.value = toolBrush
 }
 function changeToolToLine(toolBrush: string) {
+  tool.value = toolBrush
+}
+function changeToolToCircle(toolBrush: string) {
   tool.value = toolBrush
 }
 function check() {}
