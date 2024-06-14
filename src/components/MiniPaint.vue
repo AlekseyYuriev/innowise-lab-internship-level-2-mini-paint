@@ -6,6 +6,7 @@
         @change-color="changeColor"
         @change-line-width="changeLineWidth"
         @change-tool-to-brush="changeToolToBrush"
+        @change-tool-to-rectangle="changeToolToRectangle"
       />
       <div class="main__canvas">
         <canvas
@@ -13,11 +14,9 @@
           ref="canvas"
           width="720"
           height="480"
-          @mousedown.prevent="paintModel.startDrawing"
-          @mouseup.stop.prevent="paintModel.stopDrawing"
-          @mousemove.prevent="paintModel.draw"
-          @mouseout.prevent="onMouseLeave"
-          @mouseenter.prevent="onMouseEnter"
+          @mousedown.prevent="startDrawing"
+          @mouseup.stop.prevent="stopDrawing"
+          @mousemove.prevent="draw"
         ></canvas>
       </div>
       <button @click="check">Check</button>
@@ -27,44 +26,37 @@
 
 <script setup lang="ts">
 import ToolBar from '@/components/ToolBar.vue'
-import { onMounted, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import usePaint from '@/composables/usePaint'
 
-const canvas = ref<HTMLCanvasElement | null>(null)
-
-const context = ref<CanvasRenderingContext2D | null>(null)
 const color = ref<string>('#000000')
 const lineWidth = ref<number>(5)
 const tool = ref<string>('rectangle')
 
-const paintModel = usePaint(canvas, context, color, lineWidth, tool)
-
-onMounted(() => {
-  if (canvas.value) {
-    context.value = canvas.value.getContext('2d', { willReadFrequently: true })
-    if (!context.value) return
-    context.value.strokeStyle = color.value
-    context.value.lineWidth = lineWidth.value
-  }
-})
+const { canvas, ctx, draw, stopDrawing, startDrawing } = usePaint(
+  color,
+  lineWidth,
+  tool
+)
 
 function clearCanvas() {
-  if (canvas.value && context.value) {
-    context.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
+  if (canvas.value && ctx.value) {
+    ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
   }
 }
 
 function changeColor(newColor: string) {
-  if (!context.value) return
   color.value = newColor
 }
 
 function changeLineWidth(newLineWidth: number) {
-  if (!context.value) return
   lineWidth.value = newLineWidth
 }
 
 function changeToolToBrush(toolBrush: string) {
+  tool.value = toolBrush
+}
+function changeToolToRectangle(toolBrush: string) {
   tool.value = toolBrush
 }
 function check() {}
@@ -119,6 +111,7 @@ watch(tool, (newTool) => {
   height: calc(100dvw - 75px);
   width: calc(100dvw - 75px);
   border-radius: 16px;
+  cursor: crosshair;
 }
 @media screen and (max-width: 565px) {
   .main__containter {

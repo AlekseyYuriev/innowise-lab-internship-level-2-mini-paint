@@ -1,12 +1,12 @@
-import { ref, toValue, type Ref } from 'vue'
+import { onMounted, onUnmounted, ref, toValue, type Ref } from 'vue'
 
 export default function usePaint(
-  canvas: Ref<HTMLCanvasElement | null>,
-  ctx: Ref<CanvasRenderingContext2D | null>,
   color: Ref<string>,
   lineWidth: Ref<number>,
   tool: Ref<string>
 ) {
+  const canvas = ref<HTMLCanvasElement | null>(null)
+  const ctx = ref<CanvasRenderingContext2D | null>(null)
   const isDrawing = ref<boolean>(false)
   const prevMouseX = ref<number | null>(null)
   const prevMouseY = ref<number | null>(null)
@@ -24,6 +24,7 @@ export default function usePaint(
   }
 
   function startDrawing(evt: MouseEvent) {
+    if (evt.target !== canvas.value) return
     if (!canvas.value || !ctx.value) return
     isDrawing.value = true
     const rect = canvas.value.getBoundingClientRect()
@@ -41,6 +42,7 @@ export default function usePaint(
       canvas.value.width,
       canvas.value.height
     )
+    if (toValue(tool) === 'brush') drawBrush(evt)
   }
 
   function stopDrawing() {
@@ -87,5 +89,24 @@ export default function usePaint(
     )
   }
 
-  return { draw, startDrawing, stopDrawing }
+  onMounted(() => {
+    if (canvas.value) {
+      ctx.value = canvas.value.getContext('2d', { willReadFrequently: true })
+    }
+    if (ctx.value) {
+      ctx.value.strokeStyle = toValue(color)
+      ctx.value.lineWidth = toValue(lineWidth)
+    }
+    window.addEventListener('mousemove', draw)
+    window.addEventListener('mouseup', stopDrawing)
+    window.addEventListener('mousedown', startDrawing)
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('mousemove', draw)
+    window.removeEventListener('mouseup', stopDrawing)
+    window.removeEventListener('mousedown', startDrawing)
+  })
+
+  return { canvas, ctx, draw, startDrawing, stopDrawing }
 }

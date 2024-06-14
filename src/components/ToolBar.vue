@@ -2,7 +2,10 @@
   <div class="toolbar">
     <div class="toolbar__buttons">
       <button @click="changeToolToBrush" class="toolbar__button brush"></button>
-      <button class="toolbar__button rectangle"></button>
+      <button
+        @click="changeToolToRectangle"
+        class="toolbar__button rectangle"
+      ></button>
       <button class="toolbar__button circle"></button>
       <button class="toolbar__button line"></button>
       <button class="toolbar__button star"></button>
@@ -15,7 +18,7 @@
           id="color"
           value="#000000"
           v-model="color"
-          @change="changeColor"
+          @input="changeColor"
         />
       </div>
       <div class="toolbar__button-input range">
@@ -46,7 +49,8 @@ const emit = defineEmits({
   resetCanvas: null,
   changeColor: null,
   changeLineWidth: null,
-  changeToolToBrush: null
+  changeToolToBrush: null,
+  changeToolToRectangle: null
 })
 
 function clearCanvas() {
@@ -63,6 +67,9 @@ function changeLineWidth() {
 
 function changeToolToBrush() {
   emit('changeToolToBrush', 'brush')
+}
+function changeToolToRectangle() {
+  emit('changeToolToRectangle', 'rectangle')
 }
 </script>
 
@@ -128,6 +135,7 @@ function changeToolToBrush() {
   gap: 5px;
   color: var(--color-button-text);
   font-size: 14px;
+  user-select: none;
 }
 .color__input {
   height: 25px;
