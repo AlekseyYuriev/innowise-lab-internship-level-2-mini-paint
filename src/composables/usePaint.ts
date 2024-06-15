@@ -3,7 +3,8 @@ import { onMounted, onUnmounted, ref, toValue, type Ref } from 'vue'
 export default function usePaint(
   color: Ref<string>,
   lineWidth: Ref<number>,
-  tool: Ref<string>
+  tool: Ref<string>,
+  fillFigure: Ref<boolean>
 ) {
   const canvas = ref<HTMLCanvasElement | null>(null)
   const ctx = ref<CanvasRenderingContext2D | null>(null)
@@ -85,12 +86,21 @@ export default function usePaint(
     const scaleY = canvas.value.height / rect.height
 
     ctx.value.putImageData(snapShot.value, 0, 0)
-    ctx.value.fillRect(
-      prevMouseX.value,
-      prevMouseY.value,
-      (evt.clientX - rect.left) * scaleX - prevMouseX.value,
-      (evt.clientY - rect.top) * scaleY - prevMouseY.value
-    )
+    if (toValue(fillFigure)) {
+      ctx.value.fillRect(
+        prevMouseX.value,
+        prevMouseY.value,
+        (evt.clientX - rect.left) * scaleX - prevMouseX.value,
+        (evt.clientY - rect.top) * scaleY - prevMouseY.value
+      )
+    } else {
+      ctx.value.strokeRect(
+        prevMouseX.value,
+        prevMouseY.value,
+        (evt.clientX - rect.left) * scaleX - prevMouseX.value,
+        (evt.clientY - rect.top) * scaleY - prevMouseY.value
+      )
+    }
   }
 
   function drawLine(evt: MouseEvent) {
@@ -155,7 +165,9 @@ export default function usePaint(
       0,
       2 * Math.PI
     )
-    ctx.value.fill()
+    if (toValue(fillFigure)) {
+      ctx.value.fill()
+    }
     ctx.value.stroke()
   }
 

@@ -9,6 +9,7 @@
         @change-tool-to-rectangle="changeToolToRectangle"
         @change-tool-to-line="changeToolToLine"
         @change-tool-to-circle="changeToolToCircle"
+        @change-fill-figure-style="changeFillFigureStyle"
       />
       <div class="main__canvas">
         <canvas
@@ -34,11 +35,13 @@ import usePaint from '@/composables/usePaint'
 const color = ref<string>('#000000')
 const lineWidth = ref<number>(5)
 const tool = ref<string>('brush')
+const fillFigure = ref<boolean>(false)
 
 const { canvas, ctx, draw, stopDrawing, startDrawing } = usePaint(
   color,
   lineWidth,
-  tool
+  tool,
+  fillFigure
 )
 
 function clearCanvas() {
@@ -66,6 +69,9 @@ function changeToolToLine(toolBrush: string) {
 }
 function changeToolToCircle(toolBrush: string) {
   tool.value = toolBrush
+}
+function changeFillFigureStyle(fill: boolean) {
+  fillFigure.value = fill
 }
 function check() {}
 

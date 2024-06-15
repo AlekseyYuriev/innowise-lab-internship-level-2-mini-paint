@@ -37,6 +37,7 @@
           @change="changeLineWidth"
         />
       </div>
+      <fill-style-checkbox @change-fill-figure-style="changeFillFigureStyle" />
       <button @click="clearCanvas" class="toolbar__button clear"></button>
     </div>
   </div>
@@ -44,6 +45,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import FillStyleCheckbox from './FillStyleCheckbox.vue'
 
 const color = ref<string>('#000000')
 const line = ref<number>(5)
@@ -55,7 +57,8 @@ const emit = defineEmits({
   changeToolToBrush: null,
   changeToolToRectangle: null,
   changeToolToLine: null,
-  changeToolToCircle: null
+  changeToolToCircle: null,
+  changeFillFigureStyle: null
 })
 
 function clearCanvas() {
@@ -81,6 +84,9 @@ function changeToolToLine() {
 }
 function changeToolToCircle() {
   emit('changeToolToCircle', 'circle')
+}
+function changeFillFigureStyle(fill: boolean) {
+  emit('changeFillFigureStyle', fill)
 }
 </script>
 
@@ -172,6 +178,18 @@ function changeToolToCircle() {
     flex-wrap: wrap;
     justify-content: center;
   }
+}
+@media screen and (max-width: 565px) {
+  /* .toolbar {
+    height: fit-content;
+    padding: 10px;
+    width: 100%;
+  }
+  .toolbar__buttons {
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  } */
   .toolbar__button {
     width: 15px;
     height: 15px;
