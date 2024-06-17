@@ -1,28 +1,45 @@
 <template>
   <div class="toolbar">
     <div class="toolbar__buttons">
-      <button @click="changeToolToBrush" class="toolbar__button brush"></button>
+      <button
+        @click="changeToolToBrush"
+        class="toolbar__button brush"
+        :class="{ active: currentTool === 'brush' }"
+      ></button>
       <button
         @click="changeToolToRectangle"
         class="toolbar__button rectangle"
+        :class="{ active: currentTool === 'rectangle' }"
       ></button>
       <button
         @click="changeToolToCircle"
         class="toolbar__button circle"
+        :class="{ active: currentTool === 'circle' }"
       ></button>
-      <button @click="changeToolToLine" class="toolbar__button line"></button>
-      <button @click="changeToolToStar" class="toolbar__button star"></button>
+      <button
+        @click="changeToolToLine"
+        class="toolbar__button line"
+        :class="{ active: currentTool === 'line' }"
+      ></button>
+      <button
+        @click="changeToolToStar"
+        class="toolbar__button star"
+        :class="{ active: currentTool === 'star' }"
+      ></button>
       <button
         @click="changeToolToPolygon"
         class="toolbar__button polygon"
+        :class="{ active: currentTool === 'polygon' }"
       ></button>
       <button
         @click="changeToolToEraser"
         class="toolbar__button eraser"
+        :class="{ active: currentTool === 'eraser' }"
       ></button>
       <button @click="undoLast" class="toolbar__button undo"></button>
       <button @click="redoLast" class="toolbar__button redo"></button>
       <button @click="clearCanvas" class="toolbar__button clear"></button>
+      <button @click="saveImage" class="toolbar__button save"></button>
     </div>
     <div class="toolbar__options">
       <div class="toolbar__button-input">
@@ -80,6 +97,7 @@ import FillStyleCheckbox from './FillStyleCheckbox.vue'
 const color = ref<string>('#000000')
 const line = ref<number>(5)
 const sides = ref<number>(5)
+const currentTool = ref<string>('brush')
 
 const emit = defineEmits({
   changeToolToBrush: null,
@@ -92,6 +110,7 @@ const emit = defineEmits({
   undoLast: null,
   redoLast: null,
   resetCanvas: null,
+  saveImage: null,
   changeColor: null,
   changeLineWidth: null,
   changeFillFigureStyle: null,
@@ -99,30 +118,37 @@ const emit = defineEmits({
 })
 
 function changeToolToBrush() {
+  currentTool.value = 'brush'
   emit('changeToolToBrush', 'brush')
 }
 
 function changeToolToRectangle() {
+  currentTool.value = 'rectangle'
   emit('changeToolToRectangle', 'rectangle')
 }
 
 function changeToolToCircle() {
+  currentTool.value = 'circle'
   emit('changeToolToCircle', 'circle')
 }
 
 function changeToolToLine() {
+  currentTool.value = 'line'
   emit('changeToolToLine', 'line')
 }
 
 function changeToolToStar() {
+  currentTool.value = 'star'
   emit('changeToolToStar', 'star')
 }
 
 function changeToolToPolygon() {
+  currentTool.value = 'polygon'
   emit('changeToolToPolygon', 'polygon')
 }
 
 function changeToolToEraser() {
+  currentTool.value = 'eraser'
   emit('changeToolToEraser', 'eraser')
 }
 
@@ -152,6 +178,10 @@ function changeFillFigureStyle(fill: boolean) {
 
 function changeNumberOfSides() {
   emit('changeNumberOfSides', sides.value)
+}
+
+function saveImage() {
+  emit('saveImage')
 }
 </script>
 
@@ -195,9 +225,16 @@ function changeNumberOfSides() {
   background-color: transparent;
   background-position: center;
   transition: outline 0.3s;
+  transition:
+    outline 0.3s,
+    transform 0.2s;
 }
 .toolbar__button:hover {
   outline: 1px solid var(--color-button-background);
+  transform: scale(110%);
+}
+.toolbar__button:active {
+  transform: scale(98%);
 }
 .brush {
   background-image: url('../assets/icons/paint-brush-artist-svgrepo-com.svg');
@@ -229,6 +266,13 @@ function changeNumberOfSides() {
 }
 .redo {
   background-image: url('../assets/icons/redo-svgrepo-com.svg');
+}
+.save {
+  background-image: url('../assets/icons/save-icon-svgrepo-com.svg');
+}
+.active {
+  outline: 1px solid var(--color-button-background);
+  transform: scale(125%);
 }
 .toolbar__button-input {
   display: flex;
@@ -263,7 +307,7 @@ function changeNumberOfSides() {
 .toolbar__select {
   width: 50px;
 }
-@media screen and (max-width: 565px) {
+@media screen and (max-width: 600px) {
   .toolbar {
     height: fit-content;
     padding: 10px;
@@ -271,7 +315,7 @@ function changeNumberOfSides() {
     gap: 10px;
   }
   .toolbar__buttons {
-    gap: 7px;
+    gap: 5px;
     flex-wrap: wrap;
     justify-content: center;
   }

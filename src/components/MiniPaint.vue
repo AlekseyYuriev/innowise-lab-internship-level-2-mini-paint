@@ -12,6 +12,7 @@
         @undo-last="undoLast"
         @redo-last="redoLast"
         @reset-canvas="clearCanvas"
+        @save-image="saveImage"
         @change-color="changeColor"
         @change-line-width="changeLineWidth"
         @change-fill-figure-style="changeFillFigureStyle"
@@ -81,6 +82,10 @@ function changeToolToEraser(newTool: string) {
   tool.value = newTool
 }
 
+function saveImage() {
+  console.log('save')
+}
+
 function changeColor(newColor: string) {
   color.value = newColor
 }
@@ -96,12 +101,6 @@ function changeFillFigureStyle(fill: boolean) {
 function changeNumberOfSides(sides: number) {
   numberOfSides.value = sides
 }
-
-// function clearCanvas() {
-//   if (canvas.value && ctx.value) {
-//     ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
-//   }
-// }
 </script>
 
 <style scoped>
