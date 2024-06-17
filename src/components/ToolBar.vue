@@ -20,8 +20,8 @@
         @click="changeToolToEraser"
         class="toolbar__button eraser"
       ></button>
-      <button class="toolbar__button undo"></button>
-      <button class="toolbar__button redo"></button>
+      <button @click="undoLast" class="toolbar__button undo"></button>
+      <button @click="redoLast" class="toolbar__button redo"></button>
       <button @click="clearCanvas" class="toolbar__button clear"></button>
     </div>
     <div class="toolbar__options">
@@ -82,18 +82,20 @@ const line = ref<number>(5)
 const sides = ref<number>(5)
 
 const emit = defineEmits({
+  changeToolToBrush: null,
+  changeToolToRectangle: null,
+  changeToolToCircle: null,
+  changeToolToLine: null,
+  changeToolToStar: null,
+  changeToolToPolygon: null,
+  changeToolToEraser: null,
+  undoLast: null,
+  redoLast: null,
   resetCanvas: null,
   changeColor: null,
   changeLineWidth: null,
-  changeToolToBrush: null,
-  changeToolToRectangle: null,
-  changeToolToLine: null,
-  changeToolToCircle: null,
   changeFillFigureStyle: null,
-  changeNumberOfSides: null,
-  changeToolToStar: null,
-  changeToolToPolygon: null,
-  changeToolToEraser: null
+  changeNumberOfSides: null
 })
 
 function changeToolToBrush() {
@@ -124,6 +126,18 @@ function changeToolToEraser() {
   emit('changeToolToEraser', 'eraser')
 }
 
+function undoLast() {
+  emit('undoLast')
+}
+
+function redoLast() {
+  emit('redoLast')
+}
+
+function clearCanvas() {
+  emit('resetCanvas')
+}
+
 function changeColor() {
   emit('changeColor', color.value)
 }
@@ -138,10 +152,6 @@ function changeFillFigureStyle(fill: boolean) {
 
 function changeNumberOfSides() {
   emit('changeNumberOfSides', sides.value)
-}
-
-function clearCanvas() {
-  emit('resetCanvas')
 }
 </script>
 

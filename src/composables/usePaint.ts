@@ -7,19 +7,32 @@ import useCircle from './tools/useCircle'
 import usePolygon from './tools/usePolygon'
 import useEraser from './tools/useEraser'
 
+interface UsePaint {
+  canvas: Ref<HTMLCanvasElement | null>
+  draw: (evt: MouseEvent) => void
+  startDrawing: (evt: MouseEvent) => void
+  stopDrawing: () => void
+  clearCanvas: () => void
+  undoLast: () => void
+  redoLast: () => void
+}
+
 export default function usePaint(
   color: Ref<string>,
   lineWidth: Ref<number>,
   tool: Ref<string>,
   fillFigure: Ref<boolean>,
   numberOfSides: Ref<number>
-) {
+): UsePaint {
   const canvas = ref<HTMLCanvasElement | null>(null)
   const ctx = ref<CanvasRenderingContext2D | null>(null)
   const isDrawing = ref<boolean>(false)
   const prevMouseX = ref<number | null>(null)
   const prevMouseY = ref<number | null>(null)
   const snapShot = ref<ImageData | null>(null)
+
+  const undoList = ref<string[]>([])
+  const redoList = ref<string[]>([])
 
   const { drawBrush } = useBrush(canvas, ctx)
   const { drawRect } = useRect(
@@ -60,7 +73,7 @@ export default function usePaint(
 
   const { eraseImage } = useEraser(canvas, ctx)
 
-  function draw(evt: MouseEvent) {
+  function draw(evt: MouseEvent): void {
     if (!isDrawing.value) return
     if (toValue(tool) === 'brush') {
       drawBrush(evt)
@@ -79,7 +92,7 @@ export default function usePaint(
     }
   }
 
-  function startDrawing(evt: MouseEvent) {
+  function startDrawing(evt: MouseEvent): void {
     if (evt.target !== canvas.value) return
     if (!canvas.value || !ctx.value) return
     isDrawing.value = true
@@ -100,11 +113,48 @@ export default function usePaint(
       canvas.value.height
     )
     if (toValue(tool) === 'brush') drawBrush(evt)
+    undoList.value.push(canvas.value.toDataURL())
   }
 
-  function stopDrawing() {
+  function stopDrawing(): void {
     isDrawing.value = false
     ctx.value?.closePath()
+  }
+
+  function clearCanvas(): void {
+    if (canvas.value && ctx.value) {
+      ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
+    }
+  }
+
+  function undoLast(): void {
+    if (undoList.value.length > 0) {
+      const dataUrl: string | undefined = undoList.value.pop()
+      redoList.value.push(canvas.value?.toDataURL() ?? '')
+      const img: HTMLImageElement = new Image()
+      img.src = dataUrl as string
+      img.onload = (): void => {
+        clearCanvas()
+        if (!canvas.value || !ctx.value) return
+        ctx.value.drawImage(img, 0, 0, canvas.value.width, canvas.value.height)
+      }
+    } else {
+      clearCanvas()
+    }
+  }
+
+  function redoLast(): void {
+    if (redoList.value.length > 0) {
+      const dataUrl: string | undefined = redoList.value.pop()
+      undoList.value.push(canvas.value?.toDataURL() ?? '')
+      const img: HTMLImageElement = new Image()
+      img.src = dataUrl as string
+      img.onload = (): void => {
+        clearCanvas()
+        if (!canvas.value || !ctx.value) return
+        ctx.value.drawImage(img, 0, 0, canvas.value.width, canvas.value.height)
+      }
+    }
   }
 
   onMounted(() => {
@@ -126,5 +176,13 @@ export default function usePaint(
     window.removeEventListener('mousedown', startDrawing)
   })
 
-  return { canvas, ctx, draw, startDrawing, stopDrawing }
+  return {
+    canvas,
+    draw,
+    startDrawing,
+    stopDrawing,
+    clearCanvas,
+    undoLast,
+    redoLast
+  }
 }

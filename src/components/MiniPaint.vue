@@ -9,11 +9,13 @@
         @change-tool-to-star="changeToolToStar"
         @change-tool-to-polygon="changeToolToPolygon"
         @change-tool-to-eraser="changeToolToEraser"
+        @undo-last="undoLast"
+        @redo-last="redoLast"
+        @reset-canvas="clearCanvas"
         @change-color="changeColor"
         @change-line-width="changeLineWidth"
         @change-fill-figure-style="changeFillFigureStyle"
         @change-number-of-sides="changeNumberOfSides"
-        @reset-canvas="clearCanvas"
       />
       <div class="main__canvas">
         <canvas
@@ -41,13 +43,15 @@ const tool = ref<string>('brush')
 const fillFigure = ref<boolean>(false)
 const numberOfSides = ref<number>(6)
 
-const { canvas, ctx, draw, stopDrawing, startDrawing } = usePaint(
-  color,
-  lineWidth,
-  tool,
-  fillFigure,
-  numberOfSides
-)
+const {
+  canvas,
+  draw,
+  stopDrawing,
+  startDrawing,
+  clearCanvas,
+  undoLast,
+  redoLast
+} = usePaint(color, lineWidth, tool, fillFigure, numberOfSides)
 
 function changeToolToBrush(newTool: string) {
   tool.value = newTool
@@ -93,11 +97,11 @@ function changeNumberOfSides(sides: number) {
   numberOfSides.value = sides
 }
 
-function clearCanvas() {
-  if (canvas.value && ctx.value) {
-    ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
-  }
-}
+// function clearCanvas() {
+//   if (canvas.value && ctx.value) {
+//     ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
+//   }
+// }
 </script>
 
 <style scoped>
