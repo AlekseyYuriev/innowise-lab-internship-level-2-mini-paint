@@ -1,4 +1,9 @@
 import { onMounted, onUnmounted, ref, toValue, type Ref } from 'vue'
+import useStar from './tools/useStar'
+import useBrush from './tools/useBrush'
+import useRect from './tools/useRect'
+import useLine from './tools/useLine'
+import useCircle from './tools/useCircle'
 
 export default function usePaint(
   color: Ref<string>,
@@ -12,6 +17,32 @@ export default function usePaint(
   const prevMouseX = ref<number | null>(null)
   const prevMouseY = ref<number | null>(null)
   const snapShot = ref<ImageData | null>(null)
+  const { drawBrush } = useBrush(canvas, ctx)
+  const { drawRect } = useRect(
+    canvas,
+    ctx,
+    prevMouseX,
+    prevMouseY,
+    snapShot,
+    fillFigure
+  )
+  const { drawCircle } = useCircle(
+    canvas,
+    ctx,
+    prevMouseX,
+    prevMouseY,
+    snapShot,
+    fillFigure
+  )
+  const { drawLine } = useLine(canvas, ctx, prevMouseX, prevMouseY, snapShot)
+  const { drawStar } = useStar(
+    canvas,
+    ctx,
+    prevMouseX,
+    prevMouseY,
+    snapShot,
+    fillFigure
+  )
 
   function draw(evt: MouseEvent) {
     if (!isDrawing.value) return
@@ -23,6 +54,8 @@ export default function usePaint(
       drawLine(evt)
     } else if (toValue(tool) === 'circle') {
       drawCircle(evt)
+    } else if (toValue(tool) === 'star') {
+      drawStar(evt)
     }
   }
 
@@ -52,123 +85,6 @@ export default function usePaint(
   function stopDrawing() {
     isDrawing.value = false
     ctx.value?.closePath()
-  }
-
-  function drawBrush(evt: MouseEvent) {
-    if (!canvas.value || !ctx.value) return
-    ctx.value.lineCap = 'round'
-    ctx.value.lineJoin = 'round'
-
-    const rect = canvas.value.getBoundingClientRect()
-    const scaleX = canvas.value.width / rect.width
-    const scaleY = canvas.value.height / rect.height
-
-    ctx.value.lineTo(
-      (evt.clientX - rect.left) * scaleX,
-      (evt.clientY - rect.top) * scaleY
-    )
-    ctx.value.stroke()
-  }
-
-  function drawRect(evt: MouseEvent) {
-    if (
-      !canvas.value ||
-      !ctx.value ||
-      !snapShot.value ||
-      !prevMouseX.value ||
-      !prevMouseY.value
-    )
-      return
-    ctx.value.lineCap = 'butt'
-    ctx.value.lineJoin = 'miter'
-    const rect = canvas.value.getBoundingClientRect()
-    const scaleX = canvas.value.width / rect.width
-    const scaleY = canvas.value.height / rect.height
-
-    ctx.value.putImageData(snapShot.value, 0, 0)
-    if (toValue(fillFigure)) {
-      ctx.value.fillRect(
-        prevMouseX.value,
-        prevMouseY.value,
-        (evt.clientX - rect.left) * scaleX - prevMouseX.value,
-        (evt.clientY - rect.top) * scaleY - prevMouseY.value
-      )
-    } else {
-      ctx.value.strokeRect(
-        prevMouseX.value,
-        prevMouseY.value,
-        (evt.clientX - rect.left) * scaleX - prevMouseX.value,
-        (evt.clientY - rect.top) * scaleY - prevMouseY.value
-      )
-    }
-  }
-
-  function drawLine(evt: MouseEvent) {
-    if (
-      !canvas.value ||
-      !ctx.value ||
-      !snapShot.value ||
-      !prevMouseX.value ||
-      !prevMouseY.value
-    )
-      return
-
-    ctx.value.lineCap = 'butt'
-    ctx.value.lineJoin = 'miter'
-
-    const rect = canvas.value.getBoundingClientRect()
-    const scaleX = canvas.value.width / rect.width
-    const scaleY = canvas.value.height / rect.height
-
-    ctx.value.beginPath()
-    ctx.value.putImageData(snapShot.value, 0, 0)
-    ctx.value.moveTo(prevMouseX.value, prevMouseY.value)
-    ctx.value.lineTo(
-      (evt.clientX - rect.left) * scaleX,
-      (evt.clientY - rect.top) * scaleY
-    )
-    ctx.value.stroke()
-  }
-
-  function drawCircle(evt: MouseEvent) {
-    if (
-      !canvas.value ||
-      !ctx.value ||
-      !snapShot.value ||
-      !prevMouseX.value ||
-      !prevMouseY.value
-    )
-      return
-    ctx.value.lineCap = 'round'
-    ctx.value.lineJoin = 'round'
-    const rect = canvas.value.getBoundingClientRect()
-    const scaleX = canvas.value.width / rect.width
-    const scaleY = canvas.value.height / rect.height
-
-    const newPositionX = (evt.clientX - rect.left) * scaleX
-    const newPositionY = (evt.clientY - rect.top) * scaleY
-
-    const radius =
-      Math.abs(prevMouseX.value - newPositionX) / 2 >
-      Math.abs(prevMouseY.value - newPositionY) / 2
-        ? (prevMouseX.value - newPositionX) / 2
-        : (prevMouseY.value - newPositionY) / 2
-
-    if (!radius) return
-
-    ctx.value.beginPath()
-    ctx.value.putImageData(snapShot.value, 0, 0)
-    ctx.value.arc(
-      (prevMouseX.value + newPositionX) / 2,
-      (prevMouseY.value + newPositionY) / 2,
-      Math.abs(radius),
-      0,
-      2 * Math.PI
-    )
-    if (toValue(fillFigure)) {
-      ctx.value.fill()
-    }
-    ctx.value.stroke()
   }
 
   onMounted(() => {

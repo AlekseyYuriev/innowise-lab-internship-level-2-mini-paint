@@ -11,7 +11,7 @@
         class="toolbar__button circle"
       ></button>
       <button @click="changeToolToLine" class="toolbar__button line"></button>
-      <button class="toolbar__button star"></button>
+      <button @click="changeToolToStar" class="toolbar__button star"></button>
       <button class="toolbar__button polygon"></button>
       <div class="toolbar__button-input">
         <label for="color">Color:</label>
@@ -58,7 +58,8 @@ const emit = defineEmits({
   changeToolToRectangle: null,
   changeToolToLine: null,
   changeToolToCircle: null,
-  changeFillFigureStyle: null
+  changeFillFigureStyle: null,
+  changeToolToStar: null
 })
 
 function clearCanvas() {
@@ -87,6 +88,9 @@ function changeToolToCircle() {
 }
 function changeFillFigureStyle(fill: boolean) {
   emit('changeFillFigureStyle', fill)
+}
+function changeToolToStar() {
+  emit('changeToolToStar', 'star')
 }
 </script>
 

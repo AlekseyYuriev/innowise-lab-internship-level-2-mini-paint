@@ -10,6 +10,7 @@
         @change-tool-to-line="changeToolToLine"
         @change-tool-to-circle="changeToolToCircle"
         @change-fill-figure-style="changeFillFigureStyle"
+        @change-tool-to-star="changeToolToStar"
       />
       <div class="main__canvas">
         <canvas
@@ -28,8 +29,8 @@
 </template>
 
 <script setup lang="ts">
-import ToolBar from '@/components/ToolBar.vue'
 import { ref, watch } from 'vue'
+import ToolBar from '@/components/ToolBar.vue'
 import usePaint from '@/composables/usePaint'
 
 const color = ref<string>('#000000')
@@ -58,20 +59,23 @@ function changeLineWidth(newLineWidth: number) {
   lineWidth.value = newLineWidth
 }
 
-function changeToolToBrush(toolBrush: string) {
-  tool.value = toolBrush
+function changeToolToBrush(newTool: string) {
+  tool.value = newTool
 }
-function changeToolToRectangle(toolBrush: string) {
-  tool.value = toolBrush
+function changeToolToRectangle(newTool: string) {
+  tool.value = newTool
 }
-function changeToolToLine(toolBrush: string) {
-  tool.value = toolBrush
+function changeToolToLine(newTool: string) {
+  tool.value = newTool
 }
-function changeToolToCircle(toolBrush: string) {
-  tool.value = toolBrush
+function changeToolToCircle(newTool: string) {
+  tool.value = newTool
 }
 function changeFillFigureStyle(fill: boolean) {
   fillFigure.value = fill
+}
+function changeToolToStar(newTool: string) {
+  tool.value = newTool
 }
 function check() {}
 
