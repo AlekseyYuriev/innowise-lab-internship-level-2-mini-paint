@@ -17,8 +17,10 @@ export default function useStar(
       !snapShot.value
     )
       return
+
     ctx.value.lineCap = 'round'
     ctx.value.lineJoin = 'round'
+
     const rect = canvas.value.getBoundingClientRect()
     const scaleX = canvas.value.width / rect.width
     const scaleY = canvas.value.height / rect.height

@@ -2,15 +2,17 @@
   <main class="main__containter">
     <div class="main__wrapper">
       <tool-bar
-        @reset-canvas="clearCanvas"
-        @change-color="changeColor"
-        @change-line-width="changeLineWidth"
         @change-tool-to-brush="changeToolToBrush"
         @change-tool-to-rectangle="changeToolToRectangle"
-        @change-tool-to-line="changeToolToLine"
         @change-tool-to-circle="changeToolToCircle"
-        @change-fill-figure-style="changeFillFigureStyle"
+        @change-tool-to-line="changeToolToLine"
         @change-tool-to-star="changeToolToStar"
+        @change-tool-to-polygon="changeToolToPolygon"
+        @change-color="changeColor"
+        @change-line-width="changeLineWidth"
+        @change-fill-figure-style="changeFillFigureStyle"
+        @change-number-of-sides="changeNumberOfSides"
+        @reset-canvas="clearCanvas"
       />
       <div class="main__canvas">
         <canvas
@@ -23,13 +25,12 @@
           @mousemove.prevent="draw"
         ></canvas>
       </div>
-      <button @click="check">Check</button>
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import ToolBar from '@/components/ToolBar.vue'
 import usePaint from '@/composables/usePaint'
 
@@ -37,18 +38,38 @@ const color = ref<string>('#000000')
 const lineWidth = ref<number>(5)
 const tool = ref<string>('brush')
 const fillFigure = ref<boolean>(false)
+const numberOfSides = ref<number>(6)
 
 const { canvas, ctx, draw, stopDrawing, startDrawing } = usePaint(
   color,
   lineWidth,
   tool,
-  fillFigure
+  fillFigure,
+  numberOfSides
 )
 
-function clearCanvas() {
-  if (canvas.value && ctx.value) {
-    ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
-  }
+function changeToolToBrush(newTool: string) {
+  tool.value = newTool
+}
+
+function changeToolToRectangle(newTool: string) {
+  tool.value = newTool
+}
+
+function changeToolToCircle(newTool: string) {
+  tool.value = newTool
+}
+
+function changeToolToLine(newTool: string) {
+  tool.value = newTool
+}
+
+function changeToolToStar(newTool: string) {
+  tool.value = newTool
+}
+
+function changeToolToPolygon(newTool: string) {
+  tool.value = newTool
 }
 
 function changeColor(newColor: string) {
@@ -59,43 +80,19 @@ function changeLineWidth(newLineWidth: number) {
   lineWidth.value = newLineWidth
 }
 
-function changeToolToBrush(newTool: string) {
-  tool.value = newTool
-}
-function changeToolToRectangle(newTool: string) {
-  tool.value = newTool
-}
-function changeToolToLine(newTool: string) {
-  tool.value = newTool
-}
-function changeToolToCircle(newTool: string) {
-  tool.value = newTool
-}
 function changeFillFigureStyle(fill: boolean) {
   fillFigure.value = fill
 }
-function changeToolToStar(newTool: string) {
-  tool.value = newTool
+
+function changeNumberOfSides(sides: number) {
+  numberOfSides.value = sides
 }
-function check() {}
 
-watch(color, (newColor) => {
-  if (newColor) {
-    color.value = newColor
+function clearCanvas() {
+  if (canvas.value && ctx.value) {
+    ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
   }
-})
-
-watch(lineWidth, (newLineWidth) => {
-  if (newLineWidth) {
-    lineWidth.value = newLineWidth
-  }
-})
-
-watch(tool, (newTool) => {
-  if (newTool) {
-    tool.value = newTool
-  }
-})
+}
 </script>
 
 <style scoped>

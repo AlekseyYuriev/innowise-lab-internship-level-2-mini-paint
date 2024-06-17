@@ -12,7 +12,13 @@
       ></button>
       <button @click="changeToolToLine" class="toolbar__button line"></button>
       <button @click="changeToolToStar" class="toolbar__button star"></button>
-      <button class="toolbar__button polygon"></button>
+      <button
+        @click="changeToolToPolygon"
+        class="toolbar__button polygon"
+      ></button>
+      <button @click="clearCanvas" class="toolbar__button clear"></button>
+    </div>
+    <div class="toolbar__options">
       <div class="toolbar__button-input">
         <label for="color">Color:</label>
         <input
@@ -38,7 +44,25 @@
         />
       </div>
       <fill-style-checkbox @change-fill-figure-style="changeFillFigureStyle" />
-      <button @click="clearCanvas" class="toolbar__button clear"></button>
+      <div class="toolbar__side">
+        <label for="sides">Number of sides:</label>
+        <select
+          @change="changeNumberOfSides"
+          v-model="sides"
+          class="toolbar__select"
+          name="sides"
+          id="sides"
+        >
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5" default>5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+        </select>
+      </div>
     </div>
   </div>
 </template>
@@ -49,6 +73,7 @@ import FillStyleCheckbox from './FillStyleCheckbox.vue'
 
 const color = ref<string>('#000000')
 const line = ref<number>(5)
+const sides = ref<number>(5)
 
 const emit = defineEmits({
   resetCanvas: null,
@@ -59,11 +84,33 @@ const emit = defineEmits({
   changeToolToLine: null,
   changeToolToCircle: null,
   changeFillFigureStyle: null,
-  changeToolToStar: null
+  changeNumberOfSides: null,
+  changeToolToStar: null,
+  changeToolToPolygon: null
 })
 
-function clearCanvas() {
-  emit('resetCanvas')
+function changeToolToBrush() {
+  emit('changeToolToBrush', 'brush')
+}
+
+function changeToolToRectangle() {
+  emit('changeToolToRectangle', 'rectangle')
+}
+
+function changeToolToCircle() {
+  emit('changeToolToCircle', 'circle')
+}
+
+function changeToolToLine() {
+  emit('changeToolToLine', 'line')
+}
+
+function changeToolToStar() {
+  emit('changeToolToStar', 'star')
+}
+
+function changeToolToPolygon() {
+  emit('changeToolToPolygon', 'polygon')
 }
 
 function changeColor() {
@@ -74,43 +121,46 @@ function changeLineWidth() {
   emit('changeLineWidth', line.value)
 }
 
-function changeToolToBrush() {
-  emit('changeToolToBrush', 'brush')
-}
-function changeToolToRectangle() {
-  emit('changeToolToRectangle', 'rectangle')
-}
-function changeToolToLine() {
-  emit('changeToolToLine', 'line')
-}
-function changeToolToCircle() {
-  emit('changeToolToCircle', 'circle')
-}
 function changeFillFigureStyle(fill: boolean) {
   emit('changeFillFigureStyle', fill)
 }
-function changeToolToStar() {
-  emit('changeToolToStar', 'star')
+
+function changeNumberOfSides() {
+  emit('changeNumberOfSides', sides.value)
+}
+
+function clearCanvas() {
+  emit('resetCanvas')
 }
 </script>
 
 <style scoped>
 .toolbar {
   box-sizing: border-box;
+  padding: 10px 20px;
+  height: fit-content;
   width: 100%;
-  height: 45px;
   background-color: #323e4e;
   border-radius: 16px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  padding: 0 20px;
+  justify-content: space-between;
+  gap: 15px;
 }
 .toolbar__buttons {
   width: 100%;
   display: flex;
-  gap: 15px;
+  gap: 20px;
   align-items: center;
   justify-content: space-between;
+}
+.toolbar__options {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: flex-start;
 }
 .toolbar__button {
   padding: 0;
@@ -155,7 +205,7 @@ function changeToolToStar() {
   align-items: center;
   gap: 5px;
   color: var(--color-button-text);
-  font-size: 14px;
+  font-size: 13px;
   user-select: none;
 }
 .color__input {
@@ -171,32 +221,37 @@ function changeToolToStar() {
 .range__input {
   width: 100px;
 }
+.toolbar__side {
+  min-width: 105px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--color-button-text);
+  font-size: 13px;
+  user-select: none;
+}
+.toolbar__select {
+  width: 50px;
+}
 @media screen and (max-width: 565px) {
   .toolbar {
     height: fit-content;
     padding: 10px;
     width: 100%;
+    gap: 10px;
   }
   .toolbar__buttons {
     gap: 10px;
     flex-wrap: wrap;
     justify-content: center;
   }
-}
-@media screen and (max-width: 565px) {
-  /* .toolbar {
-    height: fit-content;
-    padding: 10px;
-    width: 100%;
-  }
-  .toolbar__buttons {
-    gap: 10px;
+  .toolbar__options {
     flex-wrap: wrap;
-    justify-content: center;
-  } */
+    gap: 10px;
+  }
   .toolbar__button {
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
   }
   .toolbar__button-input {
     font-size: 12px;

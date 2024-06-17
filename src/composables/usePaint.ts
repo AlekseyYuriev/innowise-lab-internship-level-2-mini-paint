@@ -4,12 +4,14 @@ import useBrush from './tools/useBrush'
 import useRect from './tools/useRect'
 import useLine from './tools/useLine'
 import useCircle from './tools/useCircle'
+import usePolygon from './tools/usePolygon'
 
 export default function usePaint(
   color: Ref<string>,
   lineWidth: Ref<number>,
   tool: Ref<string>,
-  fillFigure: Ref<boolean>
+  fillFigure: Ref<boolean>,
+  numberOfSides: Ref<number>
 ) {
   const canvas = ref<HTMLCanvasElement | null>(null)
   const ctx = ref<CanvasRenderingContext2D | null>(null)
@@ -17,6 +19,7 @@ export default function usePaint(
   const prevMouseX = ref<number | null>(null)
   const prevMouseY = ref<number | null>(null)
   const snapShot = ref<ImageData | null>(null)
+
   const { drawBrush } = useBrush(canvas, ctx)
   const { drawRect } = useRect(
     canvas,
@@ -44,6 +47,16 @@ export default function usePaint(
     fillFigure
   )
 
+  const { drawPolygon } = usePolygon(
+    canvas,
+    ctx,
+    prevMouseX,
+    prevMouseY,
+    snapShot,
+    fillFigure,
+    numberOfSides
+  )
+
   function draw(evt: MouseEvent) {
     if (!isDrawing.value) return
     if (toValue(tool) === 'brush') {
@@ -56,6 +69,8 @@ export default function usePaint(
       drawCircle(evt)
     } else if (toValue(tool) === 'star') {
       drawStar(evt)
+    } else if (toValue(tool) === 'polygon') {
+      drawPolygon(evt)
     }
   }
 

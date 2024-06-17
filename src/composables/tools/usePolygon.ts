@@ -1,14 +1,15 @@
-import type { Ref } from 'vue'
+import { type Ref } from 'vue'
 
-export default function useCircle(
+export default function usePolygon(
   canvas: Ref<HTMLCanvasElement | null>,
   ctx: Ref<CanvasRenderingContext2D | null>,
   prevMouseX: Ref<number | null>,
   prevMouseY: Ref<number | null>,
   snapShot: Ref<ImageData | null>,
-  fillFigure: Ref<boolean>
+  fillFigure: Ref<boolean>,
+  numberOfSides: Ref<number>
 ) {
-  function drawCircle(evt: MouseEvent): void {
+  function drawPolygon(evt: MouseEvent): void {
     if (
       !canvas.value ||
       !ctx.value ||
@@ -17,8 +18,12 @@ export default function useCircle(
       !prevMouseY.value
     )
       return
-    ctx.value.lineCap = 'round'
-    ctx.value.lineJoin = 'round'
+
+    if (numberOfSides.value < 3) return
+
+    ctx.value.lineCap = 'butt'
+    ctx.value.lineJoin = 'miter'
+
     const rect = canvas.value.getBoundingClientRect()
     const scaleX = canvas.value.width / rect.width
     const scaleY = canvas.value.height / rect.height
@@ -34,19 +39,32 @@ export default function useCircle(
 
     if (!radius) return
 
+    const angle = (Math.PI * 2) / numberOfSides.value
+
+    ctx.value.save()
+
+    ctx.value.translate(
+      (prevMouseX.value + newPositionX) / 2,
+      (prevMouseY.value + newPositionY) / 2
+    )
+    ctx.value.rotate(0)
     ctx.value.beginPath()
     ctx.value.putImageData(snapShot.value, 0, 0)
-    ctx.value.arc(
-      (prevMouseX.value + newPositionX) / 2,
-      (prevMouseY.value + newPositionY) / 2,
-      Math.abs(radius),
-      0,
-      2 * Math.PI
-    )
+
+    ctx.value.moveTo(radius, 0)
+    for (let i = 1; i < numberOfSides.value; i++) {
+      ctx.value.lineTo(
+        radius * Math.cos(angle * i),
+        radius * Math.sin(angle * i)
+      )
+    }
+    ctx.value.closePath()
+    ctx.value.restore()
+
+    ctx.value.stroke()
     if (fillFigure.value) {
       ctx.value.fill()
     }
-    ctx.value.stroke()
   }
-  return { drawCircle }
+  return { drawPolygon }
 }
