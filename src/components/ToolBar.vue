@@ -16,6 +16,12 @@
         @click="changeToolToPolygon"
         class="toolbar__button polygon"
       ></button>
+      <button
+        @click="changeToolToEraser"
+        class="toolbar__button eraser"
+      ></button>
+      <button class="toolbar__button undo"></button>
+      <button class="toolbar__button redo"></button>
       <button @click="clearCanvas" class="toolbar__button clear"></button>
     </div>
     <div class="toolbar__options">
@@ -86,7 +92,8 @@ const emit = defineEmits({
   changeFillFigureStyle: null,
   changeNumberOfSides: null,
   changeToolToStar: null,
-  changeToolToPolygon: null
+  changeToolToPolygon: null,
+  changeToolToEraser: null
 })
 
 function changeToolToBrush() {
@@ -111,6 +118,10 @@ function changeToolToStar() {
 
 function changeToolToPolygon() {
   emit('changeToolToPolygon', 'polygon')
+}
+
+function changeToolToEraser() {
+  emit('changeToolToEraser', 'eraser')
 }
 
 function changeColor() {
@@ -179,26 +190,35 @@ function clearCanvas() {
   outline: 1px solid var(--color-button-background);
 }
 .brush {
-  background-image: url('/paint-brush-artist-svgrepo-com.svg');
+  background-image: url('../assets/icons/paint-brush-artist-svgrepo-com.svg');
 }
 .rectangle {
-  background-image: url('/rectangle-frame-svgrepo-com.svg');
+  background-image: url('../assets/icons/rectangle-frame-svgrepo-com.svg');
 }
 .circle {
-  background-image: url('/circle-outline-svgrepo-com.svg');
+  background-image: url('../assets/icons/circle-outline-svgrepo-com.svg');
 }
 .line {
-  background-image: url('/line-svgrepo-com.svg');
+  background-image: url('../assets/icons/line-svgrepo-com.svg');
 }
 .star {
-  background-image: url('/star-svgrepo-com.svg');
+  background-image: url('../assets/icons/star-svgrepo-com.svg');
 }
 .polygon {
-  background-image: url('/perspective-svgrepo-com.svg');
+  background-image: url('../assets/icons/perspective-svgrepo-com.svg');
 }
 .clear {
-  background-image: url('/clear-svgrepo-com.svg');
+  background-image: url('../assets/icons/clear-svgrepo-com.svg');
+}
+.eraser {
+  background-image: url('../assets/icons/eraser-svgrepo-com.svg');
+}
+.undo {
+  background-image: url('../assets/icons/undo-svgrepo-com.svg');
   margin-left: auto;
+}
+.redo {
+  background-image: url('../assets/icons/redo-svgrepo-com.svg');
 }
 .toolbar__button-input {
   display: flex;
@@ -241,7 +261,7 @@ function clearCanvas() {
     gap: 10px;
   }
   .toolbar__buttons {
-    gap: 10px;
+    gap: 7px;
     flex-wrap: wrap;
     justify-content: center;
   }
@@ -250,8 +270,8 @@ function clearCanvas() {
     gap: 10px;
   }
   .toolbar__button {
-    width: 20px;
-    height: 20px;
+    width: 17px;
+    height: 17px;
   }
   .toolbar__button-input {
     font-size: 12px;

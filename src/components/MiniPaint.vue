@@ -8,6 +8,7 @@
         @change-tool-to-line="changeToolToLine"
         @change-tool-to-star="changeToolToStar"
         @change-tool-to-polygon="changeToolToPolygon"
+        @change-tool-to-eraser="changeToolToEraser"
         @change-color="changeColor"
         @change-line-width="changeLineWidth"
         @change-fill-figure-style="changeFillFigureStyle"
@@ -69,6 +70,10 @@ function changeToolToStar(newTool: string) {
 }
 
 function changeToolToPolygon(newTool: string) {
+  tool.value = newTool
+}
+
+function changeToolToEraser(newTool: string) {
   tool.value = newTool
 }
 

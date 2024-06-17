@@ -5,6 +5,7 @@ import useRect from './tools/useRect'
 import useLine from './tools/useLine'
 import useCircle from './tools/useCircle'
 import usePolygon from './tools/usePolygon'
+import useEraser from './tools/useEraser'
 
 export default function usePaint(
   color: Ref<string>,
@@ -57,6 +58,8 @@ export default function usePaint(
     numberOfSides
   )
 
+  const { eraseImage } = useEraser(canvas, ctx)
+
   function draw(evt: MouseEvent) {
     if (!isDrawing.value) return
     if (toValue(tool) === 'brush') {
@@ -71,6 +74,8 @@ export default function usePaint(
       drawStar(evt)
     } else if (toValue(tool) === 'polygon') {
       drawPolygon(evt)
+    } else if (toValue(tool) === 'eraser') {
+      eraseImage(evt)
     }
   }
 
