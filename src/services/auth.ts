@@ -3,7 +3,8 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
-  signOut
+  signOut,
+  type User
 } from 'firebase/auth'
 import {
   INVALID_CREDENTIALS,
@@ -18,9 +19,7 @@ export const register = async (
   try {
     await createUserWithEmailAndPassword(auth, email, password)
   } catch (err) {
-    if (err.code === 'auth/invalid-credential') {
-      throw new Error(INVALID_CREDENTIALS)
-    } else if (err.code === 'auth/email-already-in-use') {
+    if (err.code === 'auth/email-already-in-use') {
       throw new Error(`User with email: ${email} already exists`)
     } else if (err.code === 'auth/network-request-failed') {
       throw new Error(NO_NETWORK_CONNECTION)
@@ -33,15 +32,9 @@ export const register = async (
 export const login = async (email: string, password: string): Promise<void> => {
   try {
     await signInWithEmailAndPassword(auth, email, password)
-    // if (res) {
-    //   console.log(res.user)
-    //   return res.user.uid
-    // }
   } catch (err) {
     if (err.code === 'auth/invalid-credential') {
       throw new Error(INVALID_CREDENTIALS)
-    } else if (err.code === 'auth/email-already-in-use') {
-      throw new Error(`User with email: ${email} already exists`)
     } else if (err.code === 'auth/network-request-failed') {
       throw new Error(NO_NETWORK_CONNECTION)
     } else {
@@ -51,10 +44,14 @@ export const login = async (email: string, password: string): Promise<void> => {
 }
 
 export const logout = async (): Promise<void> => {
-  await signOut(auth)
+  try {
+    await signOut(auth)
+  } catch (error) {
+    throw new Error(`${error.code}`)
+  }
 }
 
-export const getCurrentUser = () => {
+export const getCurrentUser = (): Promise<User | null> => {
   return new Promise((resolve) => {
     const removeListener = onAuthStateChanged(auth, (user) => {
       removeListener()
