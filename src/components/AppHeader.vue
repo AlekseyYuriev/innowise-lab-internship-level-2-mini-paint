@@ -11,17 +11,23 @@
         </div>
       </template>
       <template v-else>
-        <div class="navbar__home">
-          <router-link to="/" class="navbar__button navbar__button-home"
-            >HomePage</router-link
-          >
-        </div>
-        <div class="navbar__wapper">
-          <p class="navbar__text">
-            Logged in as:
-            <span class="navbar__email">{{ authStore.user.email }}</span>
-          </p>
-          <button @click="handleLogout" class="navbar__button">Log Out</button>
+        <div class="navbar__wrapper">
+          <div class="navbar__home">
+            <router-link
+              :to="handleHeaderRoute || '/register'"
+              class="navbar__button navbar__button-home"
+              ><slot></slot
+            ></router-link>
+          </div>
+          <div class="navbar__auth-wrapper">
+            <p class="navbar__text">
+              Logged in as:
+              <span class="navbar__email">{{ authStore.user.email }}</span>
+            </p>
+            <button @click="handleLogout" class="navbar__button">
+              Log Out
+            </button>
+          </div>
         </div>
       </template>
     </div>
@@ -29,17 +35,23 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/AuthStore'
 import ThemeCheckbox from './ThemeCheckbox.vue'
+import { computed } from 'vue'
 
 const authStore = useAuthStore()
+const route = useRoute()
 const router = useRouter()
 
 const handleLogout = async (): Promise<void> => {
   await authStore.logoutUser()
   router.push('/signin')
 }
+
+const handleHeaderRoute = computed<string>(() => {
+  return route.fullPath === '/' ? '/paint' : '/'
+})
 </script>
 
 <style scoped>
@@ -51,7 +63,7 @@ const handleLogout = async (): Promise<void> => {
   border-radius: 16px;
   box-shadow: 0 20px 40px #525354;
   box-sizing: border-box;
-  padding: 10px 50px 15px;
+  padding: 10px 30px 15px;
 }
 .navbar__content {
   max-width: 762px;
@@ -71,10 +83,17 @@ const handleLogout = async (): Promise<void> => {
   font-weight: 500;
   font-size: 18px;
 }
-.navbar__wapper {
+.navbar__wrapper {
+  width: 100%;
   display: flex;
-  align-items: center;
-  gap: 30px;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.navbar__auth-wrapper {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 5px;
 }
 .navbar__text {
   margin: 0 0 0 15px;
@@ -87,8 +106,9 @@ const handleLogout = async (): Promise<void> => {
 }
 .navbar__button {
   text-decoration: none;
-  padding: 0;
-  width: 100px;
+  padding: 0 10px;
+  max-width: fit-content;
+  width: 100%;
   height: 30px;
   border: none;
   outline: 1px solid var(--color-input-outline);
@@ -119,22 +139,18 @@ const handleLogout = async (): Promise<void> => {
   .navbar__subtitle {
     font-size: 16px;
   }
-  .navbar__home {
-    display: none;
-  }
-  .navbar__wapper {
-    max-width: 600px;
-    width: 100%;
-  }
   .navbar__text {
     width: 100%;
+    font-size: 12px;
     margin: 0;
   }
   .navbar__button {
-    width: 100px;
     height: 25px;
     font-size: 12px;
-    padding: 0 5px;
+  }
+  .navbar__email {
+    font-size: 12px;
+    margin: 0;
   }
 }
 
@@ -173,13 +189,12 @@ const handleLogout = async (): Promise<void> => {
   .navbar__text {
     font-size: 12px;
     margin: 0;
+    display: none;
   }
   .navbar__email {
     font-size: 12px;
     margin: 0;
-  }
-  .navbar__button {
-    width: 80px;
+    display: none;
   }
 }
 </style>

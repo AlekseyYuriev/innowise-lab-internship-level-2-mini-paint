@@ -6,7 +6,13 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',
-    component: () => import('../views/PagePaint.vue'),
+    component: () => import('../views/GalleryPage.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/paint',
+    name: 'paint',
+    component: () => import('../views/PaintPage.vue'),
     meta: { requiresAuth: true }
   },
   {
@@ -22,7 +28,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
-    component: () => import('../views/NotFound.vue')
+    component: () => import('../views/NotFoundPage.vue')
   }
 ]
 

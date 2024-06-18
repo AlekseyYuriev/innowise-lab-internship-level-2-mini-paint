@@ -59,7 +59,7 @@
       </form>
       <p class="auth__subtitle">
         {{ props.subtitleText }}
-        <router-link :to="handleRoute || '/register'" class="auth__link">{{
+        <router-link :to="handleAuthRoute || '/register'" class="auth__link">{{
           props.linkText
         }}</router-link>
       </p>
@@ -113,7 +113,7 @@ const rules = computed(() => {
 
 const v$ = useVuelidate(rules, formData)
 
-const handleRoute = computed<string>(() => {
+const handleAuthRoute = computed<string>(() => {
   return route.fullPath === '/signin' ? '/register' : '/signin'
 })
 
@@ -260,7 +260,6 @@ const submitForm = async (): Promise<void> => {
 }
 @media screen and (max-width: 565px) {
   .auth {
-    max-width: 300px;
     margin: 15px auto 0;
     min-height: 320px;
   }

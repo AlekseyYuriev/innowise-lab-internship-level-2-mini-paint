@@ -84,6 +84,8 @@ function changeToolToEraser(newTool: string) {
 
 function saveImage() {
   console.log('save')
+  const data = canvas.value?.toDataURL()
+  console.log(typeof data)
 }
 
 function changeColor(newColor: string) {

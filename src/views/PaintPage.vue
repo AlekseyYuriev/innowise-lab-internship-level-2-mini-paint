@@ -1,5 +1,5 @@
 <template>
-  <AppHeader />
+  <AppHeader>&#8592; Back to Gallery </AppHeader>
   <mini-paint />
 </template>
 
