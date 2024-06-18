@@ -37,6 +37,11 @@
 import { ref } from 'vue'
 import ToolBar from '@/components/ToolBar.vue'
 import usePaint from '@/composables/usePaint'
+import { useCanvasStore } from '@/stores/CanvasStore'
+import { useAuthStore } from '@/stores/AuthStore'
+
+const canvasStore = useCanvasStore()
+const authStore = useAuthStore()
 
 const color = ref<string>('#000000')
 const lineWidth = ref<number>(5)
@@ -83,9 +88,12 @@ function changeToolToEraser(newTool: string) {
 }
 
 function saveImage() {
-  console.log('save')
-  const data = canvas.value?.toDataURL()
-  console.log(typeof data)
+  if (!canvas.value || !authStore.user) return
+  const data = canvas.value.toDataURL()
+  canvasStore.picture.picture = data
+  canvasStore.picture.userEmail = authStore.user.email
+  canvasStore.picture.timestamp = new Date().getTime()
+  console.log(canvasStore.picture)
 }
 
 function changeColor(newColor: string) {
@@ -108,7 +116,6 @@ function changeNumberOfSides(sides: number) {
 <style scoped>
 .main__containter {
   max-width: 762px;
-  min-height: 520px;
   width: 100%;
   background-color: #a6afb7;
   margin: 20px auto 0;
@@ -133,10 +140,28 @@ function changeNumberOfSides(sides: number) {
   background-color: var(--white);
   max-height: 480px;
   max-width: 720px;
-  height: calc(100dvw - 75px);
-  width: calc(100dvw - 75px);
+  height: calc(100dvw - 220px);
+  width: calc(100dvw - 80px);
   border-radius: 16px;
   cursor: crosshair;
+}
+@media screen and (max-width: 800px) {
+  .main__canvas-item {
+    height: calc(100dvw - 290px);
+    width: calc(100dvw - 80px);
+  }
+}
+@media screen and (max-width: 700px) {
+  .main__canvas-item {
+    height: calc(100dvw - 270px);
+    width: calc(100dvw - 80px);
+  }
+}
+@media screen and (max-width: 650px) {
+  .main__canvas-item {
+    height: calc(100dvw - 250px);
+    width: calc(100dvw - 80px);
+  }
 }
 @media screen and (max-width: 565px) {
   .main__containter {
@@ -150,8 +175,27 @@ function changeNumberOfSides(sides: number) {
     padding: 10px;
   }
   .main__canvas-item {
-    height: calc(100dvw - 70px);
-    width: calc(100dvw - 70px);
+    height: calc(100dvw - 230px);
+    width: calc(100dvw - 80px);
+  }
+  @media screen and (max-width: 500px) {
+    .main__canvas-item {
+      height: calc(100dvw - 190px);
+      width: calc(100dvw - 70px);
+    }
+  }
+
+  @media screen and (max-width: 450px) {
+    .main__canvas-item {
+      height: calc(100dvw - 175px);
+      width: calc(100dvw - 70px);
+    }
+  }
+  @media screen and (max-width: 370px) {
+    .main__canvas-item {
+      height: calc(100dvw - 160px);
+      width: calc(100dvw - 70px);
+    }
   }
 }
 </style>
