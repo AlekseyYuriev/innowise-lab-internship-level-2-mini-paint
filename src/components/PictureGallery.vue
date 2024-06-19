@@ -8,15 +8,13 @@
       placeholder="Find by user email"
       autocomplete="on"
     />
-    <div class="gallery__pictures">
-      <div class="gallery__item">
+    <div class="gallery__pictures" v-if="pictures.length > 0">
+      <div v-for="item in pictures" :key="item.timestamp" class="gallery__item">
         <div class="gallery__item-description">
-          <p class="gallery__author">
-            Created by {{ canvasStore.picture.userEmail }}
-          </p>
+          <p class="gallery__author">Created by {{ item.userEmail }}</p>
           <p class="gallery__created-date">
             {{
-              new Date(canvasStore.picture.timestamp)
+              new Date(item.timestamp)
                 .toISOString()
                 .split('T')[0]
                 .split('-')
@@ -25,48 +23,28 @@
             }}
           </p>
         </div>
-        <img ref="image" class="gallery__image" width="720" height="480" />
-      </div>
-
-      <div class="gallery__item">
-        <div class="gallery__item-description">
-          <p class="gallery__author">
-            Created by {{ canvasStore.picture.userEmail }}
-          </p>
-          <p class="gallery__created-date">
-            {{
-              new Date(canvasStore.picture.timestamp)
-                .toISOString()
-                .split('T')[0]
-                .split('-')
-                .reverse()
-                .join('-')
-            }}
-          </p>
-        </div>
-
-        <img ref="imageClone" class="gallery__image" />
+        <img
+          ref="image"
+          :src="item.picture"
+          class="gallery__image"
+          width="720"
+          height="480"
+        />
       </div>
     </div>
+    <page-loader v-else />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useCanvasStore } from '@/stores/CanvasStore'
+import { onMounted, reactive } from 'vue'
+import { getRefList, type UserPicture } from '@/services/pictures'
 
-const canvasStore = useCanvasStore()
+const pictures = reactive<UserPicture[]>([])
 
-const image = ref(null)
-const imageClone = ref(null)
-
-onMounted(() => {
-  console.log(canvasStore.picture)
-  if (image.value && canvasStore.picture) {
-    console.log(image.value)
-    image.value.src = canvasStore.picture.picture
-    imageClone.value.src = canvasStore.picture.picture
-  }
+onMounted(async () => {
+  const galleryItems = await getRefList()
+  pictures.splice(0, pictures.length, ...galleryItems)
 })
 </script>
 

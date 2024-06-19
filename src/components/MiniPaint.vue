@@ -37,10 +37,9 @@
 import { ref } from 'vue'
 import ToolBar from '@/components/ToolBar.vue'
 import usePaint from '@/composables/usePaint'
-import { useCanvasStore } from '@/stores/CanvasStore'
 import { useAuthStore } from '@/stores/AuthStore'
+import { getStorage, ref as sRef, uploadString } from 'firebase/storage'
 
-const canvasStore = useCanvasStore()
 const authStore = useAuthStore()
 
 const color = ref<string>('#000000')
@@ -89,11 +88,17 @@ function changeToolToEraser(newTool: string) {
 
 function saveImage() {
   if (!canvas.value || !authStore.user) return
+
   const data = canvas.value.toDataURL()
-  canvasStore.picture.picture = data
-  canvasStore.picture.userEmail = authStore.user.email
-  canvasStore.picture.timestamp = new Date().getTime()
-  console.log(canvasStore.picture)
+  const date = new Date().getTime()
+
+  console.log(date)
+
+  const storage = getStorage()
+  const storageRef = sRef(storage, `pictures/${authStore.user.email}/${date}`)
+  uploadString(storageRef, data, 'data_url').then((snapshot) => {
+    console.log('Uploaded a data_url string!')
+  })
 }
 
 function changeColor(newColor: string) {
@@ -140,29 +145,12 @@ function changeNumberOfSides(sides: number) {
   background-color: var(--white);
   max-height: 480px;
   max-width: 720px;
-  height: calc(100dvw - 220px);
+  height: calc((100dvw - 80px) * 2 / 3);
   width: calc(100dvw - 80px);
   border-radius: 16px;
   cursor: crosshair;
 }
-@media screen and (max-width: 800px) {
-  .main__canvas-item {
-    height: calc(100dvw - 290px);
-    width: calc(100dvw - 80px);
-  }
-}
-@media screen and (max-width: 700px) {
-  .main__canvas-item {
-    height: calc(100dvw - 270px);
-    width: calc(100dvw - 80px);
-  }
-}
-@media screen and (max-width: 650px) {
-  .main__canvas-item {
-    height: calc(100dvw - 250px);
-    width: calc(100dvw - 80px);
-  }
-}
+
 @media screen and (max-width: 565px) {
   .main__containter {
     min-height: 340px;
@@ -172,30 +160,6 @@ function changeNumberOfSides(sides: number) {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
-  }
-  .main__canvas-item {
-    height: calc(100dvw - 230px);
-    width: calc(100dvw - 80px);
-  }
-  @media screen and (max-width: 500px) {
-    .main__canvas-item {
-      height: calc(100dvw - 190px);
-      width: calc(100dvw - 70px);
-    }
-  }
-
-  @media screen and (max-width: 450px) {
-    .main__canvas-item {
-      height: calc(100dvw - 175px);
-      width: calc(100dvw - 70px);
-    }
-  }
-  @media screen and (max-width: 370px) {
-    .main__canvas-item {
-      height: calc(100dvw - 160px);
-      width: calc(100dvw - 70px);
-    }
   }
 }
 </style>
