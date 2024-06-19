@@ -1,90 +1,101 @@
 <template>
   <div class="toolbar">
     <div class="toolbar__buttons">
-      <button
-        @click="changeToolToBrush"
-        class="toolbar__button brush"
-        :class="{ active: currentTool === 'brush' }"
-      ></button>
-      <button
-        @click="changeToolToRectangle"
-        class="toolbar__button rectangle"
-        :class="{ active: currentTool === 'rectangle' }"
-      ></button>
-      <button
-        @click="changeToolToCircle"
-        class="toolbar__button circle"
-        :class="{ active: currentTool === 'circle' }"
-      ></button>
-      <button
-        @click="changeToolToLine"
-        class="toolbar__button line"
-        :class="{ active: currentTool === 'line' }"
-      ></button>
-      <button
-        @click="changeToolToStar"
-        class="toolbar__button star"
-        :class="{ active: currentTool === 'star' }"
-      ></button>
-      <button
-        @click="changeToolToPolygon"
-        class="toolbar__button polygon"
-        :class="{ active: currentTool === 'polygon' }"
-      ></button>
-      <button
-        @click="changeToolToEraser"
-        class="toolbar__button eraser"
-        :class="{ active: currentTool === 'eraser' }"
-      ></button>
-      <button @click="undoLast" class="toolbar__button undo"></button>
-      <button @click="redoLast" class="toolbar__button redo"></button>
-      <button @click="clearCanvas" class="toolbar__button clear"></button>
-      <button @click="saveImage" class="toolbar__button save"></button>
+      <div class="toolbar__buttons-wrapper">
+        <button
+          @click="changeToolToBrush"
+          class="toolbar__button brush"
+          :class="{ active: currentTool === 'brush' }"
+        ></button>
+        <button
+          @click="changeToolToRectangle"
+          class="toolbar__button rectangle"
+          :class="{ active: currentTool === 'rectangle' }"
+        ></button>
+        <button
+          @click="changeToolToCircle"
+          class="toolbar__button circle"
+          :class="{ active: currentTool === 'circle' }"
+        ></button>
+        <button
+          @click="changeToolToLine"
+          class="toolbar__button line"
+          :class="{ active: currentTool === 'line' }"
+        ></button>
+        <button
+          @click="changeToolToStar"
+          class="toolbar__button star"
+          :class="{ active: currentTool === 'star' }"
+        ></button>
+        <button
+          @click="changeToolToPolygon"
+          class="toolbar__button polygon"
+          :class="{ active: currentTool === 'polygon' }"
+        ></button>
+        <button
+          @click="changeToolToEraser"
+          class="toolbar__button eraser"
+          :class="{ active: currentTool === 'eraser' }"
+        ></button>
+      </div>
+
+      <div class="toolbar__buttons-wrapper">
+        <button @click="undoLast" class="toolbar__button undo"></button>
+        <button @click="redoLast" class="toolbar__button redo"></button>
+        <button @click="clearCanvas" class="toolbar__button clear"></button>
+        <button @click="saveImage" class="toolbar__button save"></button>
+      </div>
     </div>
     <div class="toolbar__options">
-      <div class="toolbar__button-input">
-        <label for="color">Color:</label>
-        <input
-          type="color"
-          class="color__input"
-          id="color"
-          value="#000000"
-          v-model="color"
-          @input="changeColor"
-        />
+      <div class="toolbar__buttons-wrapper">
+        <div class="toolbar__button-input">
+          <label for="color">Color:</label>
+          <input
+            type="color"
+            class="color__input"
+            id="color"
+            value="#000000"
+            v-model="color"
+            @input="changeColor"
+          />
+        </div>
+        <div class="toolbar__button-input range">
+          <label for="range">Line width: {{ line }} </label>
+          <input
+            type="range"
+            class="range__input"
+            id="range"
+            min="1"
+            max="40"
+            value="5"
+            v-model="line"
+            @change="changeLineWidth"
+          />
+        </div>
       </div>
-      <div class="toolbar__button-input range">
-        <label for="range">Line width: {{ line }} </label>
-        <input
-          type="range"
-          class="range__input"
-          id="range"
-          min="1"
-          max="40"
-          value="5"
-          v-model="line"
-          @change="changeLineWidth"
+      <div class="toolbar__buttons-wrapper">
+        <fill-style-checkbox
+          @change-fill-figure-style="changeFillFigureStyle"
         />
-      </div>
-      <fill-style-checkbox @change-fill-figure-style="changeFillFigureStyle" />
-      <div class="toolbar__side">
-        <label for="sides">Number of sides:</label>
-        <select
-          @change="changeNumberOfSides"
-          v-model="sides"
-          class="toolbar__select"
-          name="sides"
-          id="sides"
-        >
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5" default>5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-        </select>
+        <div class="toolbar__side">
+          <label for="sides">Number of sides:</label>
+          <select
+            @change="changeNumberOfSides"
+            v-model="sides"
+            class="toolbar__select"
+            name="sides"
+            id="sides"
+          >
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5" default>5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
@@ -206,6 +217,12 @@ function saveImage() {
   align-items: center;
   justify-content: space-between;
 }
+.toolbar__buttons-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
 .toolbar__options {
   width: 100%;
   display: flex;
@@ -310,14 +327,17 @@ function saveImage() {
 @media screen and (max-width: 600px) {
   .toolbar {
     height: fit-content;
-    padding: 10px;
     width: 100%;
     gap: 10px;
   }
   .toolbar__buttons {
-    gap: 5px;
+    gap: 15px;
     flex-wrap: wrap;
-    justify-content: center;
+  }
+  .toolbar__buttons-wrapper {
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
   }
   .toolbar__options {
     flex-wrap: wrap;
@@ -333,6 +353,16 @@ function saveImage() {
   .color__input {
     height: 20px;
     width: 35px;
+  }
+}
+@media screen and (max-width: 500px) {
+  .toolbar__buttons {
+    flex-direction: column;
+    justify-content: center;
+  }
+  .toolbar__options {
+    flex-direction: column;
+    justify-content: center;
   }
 }
 </style>

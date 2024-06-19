@@ -106,28 +106,4 @@ const changeFillFigureStyle = () => {
 .filter__checkbox:checked + .filter__checkbox-button::after {
   left: 33px;
 }
-
-/* @media screen and (max-width: 700px) {
-  .filter {
-    padding: 0 0 5px 0;
-  }
-  .filter__switch {
-    margin-right: 5px;
-  }
-  .filter__checkbox-button {
-    padding-left: 35px;
-  }
-  .filter__checkbox-button::before {
-    left: 6.5px;
-    top: 5px;
-    width: 24px;
-    height: 10px;
-  }
-  .filter__checkbox-button::after {
-    left: 8.5px;
-    top: 6px;
-    width: 8px;
-    height: 8px;
-  }
-} */
 </style>

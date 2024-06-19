@@ -2,7 +2,8 @@ import {
   getDownloadURL,
   getStorage,
   listAll,
-  ref as sRef
+  ref as sRef,
+  uploadString
 } from 'firebase/storage'
 
 export interface UserPicture {
@@ -11,30 +12,41 @@ export interface UserPicture {
   picture: string
 }
 
-export const getRefList = async () => {
+export const getAllPictures = async () => {
+  const userPicturesArray: UserPicture[] = []
+
   const storage = getStorage()
 
   const listRef = sRef(storage, 'pictures/')
 
-  const refList: UserPicture[] = []
+  const storageRoutes = await listAll(listRef)
 
-  const res = await listAll(listRef)
+  for (const folderRef of storageRoutes.prefixes) {
+    const userRef = sRef(storage, `pictures/${folderRef.name}`)
+    const imageList = await listAll(userRef)
 
-  for (const folderRef of res.prefixes) {
-    const newRef = sRef(storage, `pictures/${folderRef.name}`)
-    const list = await listAll(newRef)
-
-    for (const item of list.items) {
-      const userEmail = item.fullPath.split('/')[1]
-      const createdDate = Number(item.fullPath.split('/')[2])
-      const url = await getDownloadURL(sRef(storage, item.fullPath))
-      refList.push({
+    for (const image of imageList.items) {
+      const userEmail = image.fullPath.split('/')[1]
+      const createdDate = Number(image.fullPath.split('/')[2])
+      const url = await getDownloadURL(sRef(storage, image.fullPath))
+      userPicturesArray.push({
         userEmail: userEmail,
         timestamp: createdDate,
         picture: url
       })
     }
   }
+  return userPicturesArray
+}
 
-  return refList
+export const savePicture = async (
+  userEmail: string,
+  dateTimestamp: number,
+  imageData: string
+) => {
+  const storage = getStorage()
+  const storageRef = sRef(storage, `pictures/${userEmail}/${dateTimestamp}`)
+  uploadString(storageRef, imageData, 'data_url').then((snapshot) => {
+    console.log('Uploaded a data_url string!')
+  })
 }

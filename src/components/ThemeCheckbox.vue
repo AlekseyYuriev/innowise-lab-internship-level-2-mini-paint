@@ -7,6 +7,7 @@
         type="checkbox"
         class="filter__checkbox"
         id="checkbox"
+        checked
       />
       <span class="filter__checkbox-button"></span>
     </label>
@@ -15,7 +16,7 @@
 
 <script setup lang="ts">
 const changeTheme = () => {
-  document.body.classList.toggle('dark')
+  document.body.classList.toggle('light')
 }
 </script>
 

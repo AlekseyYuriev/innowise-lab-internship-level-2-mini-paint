@@ -12,7 +12,7 @@
         @undo-last="undoLast"
         @redo-last="redoLast"
         @reset-canvas="clearCanvas"
-        @save-image="saveImage"
+        @save-image="showConfirmationDialog"
         @change-color="changeColor"
         @change-line-width="changeLineWidth"
         @change-fill-figure-style="changeFillFigureStyle"
@@ -31,6 +31,12 @@
       </div>
     </div>
   </main>
+  <confirmation-dialog
+    v-if="confirm"
+    @hide-dialog="hideConfirmationDialog"
+    @save-image="saveImage"
+    :isLoading="isLoading"
+  />
 </template>
 
 <script setup lang="ts">
@@ -38,7 +44,8 @@ import { ref } from 'vue'
 import ToolBar from '@/components/ToolBar.vue'
 import usePaint from '@/composables/usePaint'
 import { useAuthStore } from '@/stores/AuthStore'
-import { getStorage, ref as sRef, uploadString } from 'firebase/storage'
+import { savePicture } from '@/services/pictures'
+import ConfirmationDialog from '@/components/ConfirmationDialog.vue'
 
 const authStore = useAuthStore()
 
@@ -47,6 +54,8 @@ const lineWidth = ref<number>(5)
 const tool = ref<string>('brush')
 const fillFigure = ref<boolean>(false)
 const numberOfSides = ref<number>(6)
+const confirm = ref<boolean>(false)
+const isLoading = ref<boolean>(false)
 
 const {
   canvas,
@@ -86,19 +95,20 @@ function changeToolToEraser(newTool: string) {
   tool.value = newTool
 }
 
+const showConfirmationDialog = () => {
+  confirm.value = true
+}
+
 function saveImage() {
-  if (!canvas.value || !authStore.user) return
+  if (!canvas.value || !authStore.user || !authStore.user.email) return
+  isLoading.value = true
+  const dateTimestamp = new Date().getTime()
+  const imageData = canvas.value.toDataURL()
 
-  const data = canvas.value.toDataURL()
-  const date = new Date().getTime()
+  savePicture(authStore.user.email, dateTimestamp, imageData)
 
-  console.log(date)
-
-  const storage = getStorage()
-  const storageRef = sRef(storage, `pictures/${authStore.user.email}/${date}`)
-  uploadString(storageRef, data, 'data_url').then((snapshot) => {
-    console.log('Uploaded a data_url string!')
-  })
+  isLoading.value = false
+  hideConfirmationDialog()
 }
 
 function changeColor(newColor: string) {
@@ -115,6 +125,10 @@ function changeFillFigureStyle(fill: boolean) {
 
 function changeNumberOfSides(sides: number) {
   numberOfSides.value = sides
+}
+
+const hideConfirmationDialog = () => {
+  confirm.value = false
 }
 </script>
 

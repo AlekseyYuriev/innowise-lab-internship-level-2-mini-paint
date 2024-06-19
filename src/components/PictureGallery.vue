@@ -2,14 +2,22 @@
   <div class="gallery">
     <h1 class="gallery__title">Picture Gallery</h1>
     <input
+      v-model.trim="userEmail"
       type="text"
       name="search"
       class="gallery__input"
       placeholder="Find by user email"
       autocomplete="on"
     />
-    <div class="gallery__pictures" v-if="pictures.length > 0">
-      <div v-for="item in pictures" :key="item.timestamp" class="gallery__item">
+    <div
+      v-if="filteredPictures.length > 0 && !isLoading"
+      class="gallery__pictures"
+    >
+      <div
+        v-for="item in filteredPictures"
+        :key="item.timestamp"
+        class="gallery__item"
+      >
         <div class="gallery__item-description">
           <p class="gallery__author">Created by {{ item.userEmail }}</p>
           <p class="gallery__created-date">
@@ -29,22 +37,46 @@
           class="gallery__image"
           width="720"
           height="480"
+          alt="Gallery image"
         />
       </div>
     </div>
-    <page-loader v-else />
+    <page-loader v-else-if="isLoading" />
+    <div v-else-if="pictures.length === 0" class="gallery__empty">
+      No pictures yet. Create new image and save it to the gallery.
+    </div>
+    <div v-else class="gallery__empty">
+      A user with such email haven't saved images to the gallery yet.
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue'
-import { getRefList, type UserPicture } from '@/services/pictures'
+import { computed, onMounted, reactive, ref } from 'vue'
+import { getAllPictures, type UserPicture } from '@/services/pictures'
 
 const pictures = reactive<UserPicture[]>([])
+const userEmail = ref<string>('')
+const isLoading = ref<boolean>(false)
+
+const filteredPictures = computed(() => {
+  const sortedArr = [...pictures].sort((a, b) => {
+    return a.timestamp < b.timestamp ? 1 : -1
+  })
+  if (userEmail.value) {
+    const filteredAndSortedArr = sortedArr.filter((item) =>
+      item.userEmail?.includes(userEmail.value)
+    )
+    return filteredAndSortedArr
+  }
+  return sortedArr
+})
 
 onMounted(async () => {
-  const galleryItems = await getRefList()
-  pictures.splice(0, pictures.length, ...galleryItems)
+  isLoading.value = true
+  const galleryPictures = await getAllPictures()
+  pictures.splice(0, pictures.length, ...galleryPictures)
+  isLoading.value = false
 })
 </script>
 
@@ -65,6 +97,12 @@ onMounted(async () => {
   padding-bottom: 15px;
   text-align: center;
   color: var(--color-text-main);
+}
+.gallery__empty {
+  color: var(--color-text-main);
+  font-size: 18px;
+  padding: 20px 20px 0;
+  text-align: center;
 }
 .gallery__input {
   height: 30px;
@@ -88,6 +126,8 @@ onMounted(async () => {
 .gallery__item {
   border-bottom: 1px solid var(--color-text-main);
   padding-bottom: 15px;
+  max-width: 720px;
+  width: 100%;
 }
 .gallery__item-description {
   box-sizing: border-box;
