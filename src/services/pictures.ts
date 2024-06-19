@@ -13,30 +13,34 @@ export interface UserPicture {
 }
 
 export const getAllPictures = async () => {
-  const userPicturesArray: UserPicture[] = []
+  try {
+    const userPicturesArray: UserPicture[] = []
 
-  const storage = getStorage()
+    const storage = getStorage()
 
-  const listRef = sRef(storage, 'pictures/')
+    const listRef = sRef(storage, 'pictures/')
 
-  const storageRoutes = await listAll(listRef)
+    const storageRoutes = await listAll(listRef)
 
-  for (const folderRef of storageRoutes.prefixes) {
-    const userRef = sRef(storage, `pictures/${folderRef.name}`)
-    const imageList = await listAll(userRef)
+    for (const folderRef of storageRoutes.prefixes) {
+      const userRef = sRef(storage, `pictures/${folderRef.name}`)
+      const imageList = await listAll(userRef)
 
-    for (const image of imageList.items) {
-      const userEmail = image.fullPath.split('/')[1]
-      const createdDate = Number(image.fullPath.split('/')[2])
-      const url = await getDownloadURL(sRef(storage, image.fullPath))
-      userPicturesArray.push({
-        userEmail: userEmail,
-        timestamp: createdDate,
-        picture: url
-      })
+      for (const image of imageList.items) {
+        const userEmail = image.fullPath.split('/')[1]
+        const createdDate = Number(image.fullPath.split('/')[2])
+        const url = await getDownloadURL(sRef(storage, image.fullPath))
+        userPicturesArray.push({
+          userEmail: userEmail,
+          timestamp: createdDate,
+          picture: url
+        })
+      }
     }
+    return userPicturesArray
+  } catch (error) {
+    console.error('Error')
   }
-  return userPicturesArray
 }
 
 export const savePicture = async (
@@ -44,9 +48,11 @@ export const savePicture = async (
   dateTimestamp: number,
   imageData: string
 ) => {
-  const storage = getStorage()
-  const storageRef = sRef(storage, `pictures/${userEmail}/${dateTimestamp}`)
-  uploadString(storageRef, imageData, 'data_url').then((snapshot) => {
-    console.log('Uploaded a data_url string!')
-  })
+  try {
+    const storage = getStorage()
+    const storageRef = sRef(storage, `pictures/${userEmail}/${dateTimestamp}`)
+    await uploadString(storageRef, imageData, 'data_url')
+  } catch (error) {
+    console.error('Error')
+  }
 }
