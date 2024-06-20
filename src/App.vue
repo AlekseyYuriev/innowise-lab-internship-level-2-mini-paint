@@ -23,4 +23,9 @@ onMounted(() => {
   margin: 0 auto;
   padding: 20px;
 }
+@media screen and (max-width: 480px) {
+  .page {
+    min-width: 300px;
+  }
+}
 </style>

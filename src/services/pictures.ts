@@ -12,7 +12,7 @@ export interface UserPicture {
   picture: string
 }
 
-export const getAllPictures = async () => {
+export const getAllPictures = async (): Promise<UserPicture[] | undefined> => {
   try {
     const userPicturesArray: UserPicture[] = []
 
@@ -40,6 +40,7 @@ export const getAllPictures = async () => {
     return userPicturesArray
   } catch (error) {
     console.error('Error')
+    return undefined
   }
 }
 
@@ -47,7 +48,7 @@ export const savePicture = async (
   userEmail: string,
   dateTimestamp: number,
   imageData: string
-) => {
+): Promise<void> => {
   try {
     const storage = getStorage()
     const storageRef = sRef(storage, `pictures/${userEmail}/${dateTimestamp}`)

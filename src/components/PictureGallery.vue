@@ -75,7 +75,7 @@ const filteredPictures = computed(() => {
 onMounted(async () => {
   isLoading.value = true
   const galleryPictures = await getAllPictures()
-  pictures.splice(0, pictures.length, ...galleryPictures)
+  pictures.splice(0, pictures.length, ...(galleryPictures as []))
   isLoading.value = false
 })
 </script>
@@ -85,7 +85,6 @@ onMounted(async () => {
   box-sizing: border-box;
   max-width: 762px;
   min-height: 600px;
-  width: 100%;
   background-color: var(--color-container-background);
   margin: 30px auto 0;
   padding: 20px;

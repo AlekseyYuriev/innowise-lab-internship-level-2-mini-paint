@@ -24,7 +24,7 @@ const changeTheme = () => {
 .filter {
   display: flex;
   justify-content: flex-end;
-  padding: 0 10px 5px 0;
+  padding: 0 0 5px 0;
 }
 
 .filter__switch {
@@ -99,12 +99,6 @@ const changeTheme = () => {
 }
 
 @media screen and (max-width: 700px) {
-  .filter {
-    padding: 0 0 5px 0;
-  }
-  .filter__switch {
-    margin-right: 5px;
-  }
   .filter__checkbox-button {
     padding-left: 35px;
   }
