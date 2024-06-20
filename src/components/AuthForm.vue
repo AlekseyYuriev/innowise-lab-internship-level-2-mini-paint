@@ -1,5 +1,4 @@
 <template>
-  <AppHeader />
   <div class="auth">
     <div class="auth__container">
       <h1 class="auth__title">{{ props.title }}</h1>

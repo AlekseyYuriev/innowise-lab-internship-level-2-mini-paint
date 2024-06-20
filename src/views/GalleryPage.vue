@@ -1,6 +1,8 @@
 <template>
-  <AppHeader>+Create new picture</AppHeader>
-  <picture-gallery />
+  <div>
+    <AppHeader>+Create new picture</AppHeader>
+    <picture-gallery />
+  </div>
 </template>
 
 <script setup lang="ts">

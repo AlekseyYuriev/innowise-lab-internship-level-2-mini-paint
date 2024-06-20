@@ -7,7 +7,7 @@
         type="checkbox"
         class="filter__checkbox"
         id="checkbox"
-        checked
+        :checked="authStore.themeDark"
       />
       <span class="filter__checkbox-button"></span>
     </label>
@@ -15,7 +15,11 @@
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from '../stores/AuthStore'
+
+const authStore = useAuthStore()
 const changeTheme = () => {
+  authStore.themeDark = !authStore.themeDark
   document.body.classList.toggle('light')
 }
 </script>

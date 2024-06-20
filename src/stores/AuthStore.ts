@@ -12,6 +12,7 @@ export interface User {
 export const useAuthStore = defineStore('authStore', () => {
   const user = ref<User | null>(null)
   const authIsReady = ref<boolean>(false)
+  const themeDark = ref<boolean>(true)
 
   const init = () => {
     onAuthStateChanged(auth, (userDetails) => {
@@ -36,5 +37,13 @@ export const useAuthStore = defineStore('authStore', () => {
     await logout()
   }
 
-  return { init, registerUser, loginUser, logoutUser, user, authIsReady }
+  return {
+    init,
+    registerUser,
+    loginUser,
+    logoutUser,
+    user,
+    authIsReady,
+    themeDark
+  }
 })

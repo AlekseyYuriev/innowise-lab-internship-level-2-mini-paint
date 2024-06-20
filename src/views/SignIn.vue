@@ -1,10 +1,13 @@
 <template>
-  <AuthForm
-    title="Sign In"
-    buttonText="Signin"
-    subtitleText="New to Vue Paint World?"
-    linkText="Go to Sign Up"
-  />
+  <div>
+    <AppHeader />
+    <AuthForm
+      title="Sign In"
+      buttonText="Signin"
+      subtitleText="New to Vue Paint World?"
+      linkText="Go to Sign Up"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">

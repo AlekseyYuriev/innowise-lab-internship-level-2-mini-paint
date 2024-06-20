@@ -1,6 +1,8 @@
 <template>
-  <AppHeader>&#8592; Back to Gallery </AppHeader>
-  <mini-paint />
+  <div>
+    <AppHeader>&#8592; Back to Gallery </AppHeader>
+    <mini-paint />
+  </div>
 </template>
 
 <script setup lang="ts">
