@@ -1,4 +1,9 @@
 import { getCurrentUser } from '@/services/auth'
+import GalleryPage from '@/views/GalleryPage.vue'
+import NotFound from '@/views/NotFound.vue'
+import PaintPage from '@/views/PaintPage.vue'
+import SignIn from '@/views/SignIn.vue'
+import SignUp from '@/views/SignUp.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 
@@ -6,29 +11,29 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',
-    component: () => import('../views/GalleryPage.vue'),
+    component: GalleryPage,
     meta: { requiresAuth: true }
   },
   {
     path: '/paint',
     name: 'paint',
-    component: () => import('../views/PaintPage.vue'),
+    component: PaintPage,
     meta: { requiresAuth: true }
   },
   {
     path: '/signin',
     name: 'signin',
-    component: () => import('../views/SignIn.vue')
+    component: SignIn
   },
   {
     path: '/register',
     name: 'register',
-    component: () => import('../views/SignUp.vue')
+    component: SignUp
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
-    component: () => import('../views/NotFound.vue')
+    component: NotFound
   }
 ]
 
@@ -48,15 +53,6 @@ router.beforeEach(async (to) => {
 
   if (authenticatedUser && (to.name === 'signin' || to.name === 'register')) {
     return { name: 'home' }
-  }
-})
-
-router.onError((error, to) => {
-  if (
-    error.message.includes('Failed to fetch dynamically imported module') ||
-    error.message.includes('Importing a module script failed')
-  ) {
-    window.location.href = to.fullPath
   }
 })
 

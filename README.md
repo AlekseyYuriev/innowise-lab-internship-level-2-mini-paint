@@ -12,7 +12,9 @@ https://drive.google.com/file/d/19cb4whI_HUVPzuaPyaj5r6hGotIVnhho/view
 
 <h2>3. Database snapshot</h2>
 All saved images are sent to storage. The storage structure in firebase is organized the following way:
+
 <br>
+
 <img width="600" src="./public/firebase1.png" alt="Firebase Data Structure">
 <img width="600" src="./public/firebase2.png" alt="Firebase Data Structure">
 <img width="600" src="./public/firebase3.png" alt="Firebase Data Structure">
