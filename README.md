@@ -45,4 +45,4 @@ The App has the following file structure:
 
 <h2>5. Link to the deployed app</h2>
 
-https://clever-to-do-list-15684.web.app
+https://mini-paint-5883c.web.app
