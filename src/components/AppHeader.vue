@@ -54,7 +54,11 @@ const handleHeaderRoute = computed<string>(() => {
 })
 
 const handleButtonText = computed<string>(() => {
-  return route.fullPath === '/' ? '+Create new picture' : "←Back to Gallery"
+  return route.fullPath === '/' ||
+    route.fullPath === '/signin' ||
+    route.fullPath === '/register'
+    ? '+Create new picture'
+    : '←Back to Gallery'
 })
 </script>
 
