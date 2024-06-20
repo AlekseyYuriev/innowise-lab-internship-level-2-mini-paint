@@ -13,7 +13,7 @@
   box-sizing: border-box;
   min-width: 280px;
   margin: 0 auto;
-  background-color: var(--color-body-background);
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -16,8 +16,8 @@
             <router-link
               :to="handleHeaderRoute || '/register'"
               class="navbar__button navbar__button-home"
-              ><slot></slot
-            ></router-link>
+              >{{ handleButtonText }}
+            </router-link>
           </div>
           <div class="navbar__auth-wrapper">
             <p class="navbar__text">
@@ -52,11 +52,16 @@ const handleLogout = async (): Promise<void> => {
 const handleHeaderRoute = computed<string>(() => {
   return route.fullPath === '/' ? '/paint' : '/'
 })
+
+const handleButtonText = computed<string>(() => {
+  return route.fullPath === '/' ? '+Create new picture' : "←Back to Gallery"
+})
 </script>
 
 <style scoped>
 .navbar {
   max-width: 762px;
+  height: 105px;
   background-color: var(--color-container-background);
   width: 100%;
   margin: 0 auto;
@@ -64,6 +69,9 @@ const handleHeaderRoute = computed<string>(() => {
   box-shadow: 0 20px 40px #525354;
   box-sizing: border-box;
   padding: 10px 30px 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .navbar__content {
   max-width: 762px;

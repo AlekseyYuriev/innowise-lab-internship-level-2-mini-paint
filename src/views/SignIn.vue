@@ -1,6 +1,5 @@
 <template>
   <div>
-    <AppHeader />
     <AuthForm
       title="Sign In"
       buttonText="Signin"

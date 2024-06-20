@@ -1,6 +1,5 @@
 <template>
   <div>
-    <AppHeader>+Create new picture</AppHeader>
     <picture-gallery />
   </div>
 </template>

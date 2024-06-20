@@ -1,6 +1,7 @@
 <template>
   <page-loader v-if="!authStore.authIsReady" />
   <div v-else class="page">
+    <AppHeader />
     <router-view v-slot="{ Component }">
       <transition name="fade" mode="out-in">
         <component :is="Component" :key="$route.path" />
@@ -12,6 +13,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useAuthStore } from './stores/AuthStore'
+import AppHeader from './components/AppHeader.vue';
 
 const authStore = useAuthStore()
 
@@ -29,7 +31,7 @@ onMounted(() => {
 }
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.8s;
+  transition: opacity 0.5s;
 }
 .fade-enter,
 .fade-leave-to {
