@@ -41,6 +41,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import ToolBar from '@/components/ToolBar.vue'
 import usePaint from '@/composables/usePaint'
 import { useAuthStore } from '@/stores/AuthStore'
@@ -48,6 +49,7 @@ import { savePicture } from '@/services/pictures'
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue'
 
 const authStore = useAuthStore()
+const router = useRouter()
 
 const color = ref<string>('#000000')
 const lineWidth = ref<number>(5)
@@ -109,6 +111,7 @@ function saveImage() {
 
   isLoading.value = false
   hideConfirmationDialog()
+  router.push('/')
 }
 
 function changeColor(newColor: string) {
