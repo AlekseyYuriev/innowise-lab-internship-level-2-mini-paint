@@ -1,8 +1,20 @@
-import { getCurrentUser } from '@/services/auth'
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
+import { getCurrentUser } from '@/services/auth'
+import SignIn from '@/views/SignIn.vue'
+import SignUp from '../views/SignUp.vue'
 
 const routes: RouteRecordRaw[] = [
+  {
+    path: '/signin',
+    name: 'signin',
+    component: SignIn
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: SignUp
+  },
   {
     path: '/',
     name: 'home',
@@ -14,16 +26,6 @@ const routes: RouteRecordRaw[] = [
     name: 'paint',
     component: () => import('../views/PaintPage.vue'),
     meta: { requiresAuth: true }
-  },
-  {
-    path: '/signin',
-    name: 'signin',
-    component: () => import('../views/SignIn.vue')
-  },
-  {
-    path: '/register',
-    name: 'register',
-    component: () => import('../views/SignUp.vue')
   },
   {
     path: '/:pathMatch(.*)*',
