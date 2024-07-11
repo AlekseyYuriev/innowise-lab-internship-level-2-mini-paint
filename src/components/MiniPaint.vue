@@ -2,13 +2,7 @@
   <main class="main__containter">
     <div class="main__wrapper">
       <tool-bar
-        @change-tool-to-brush="changeToolToBrush"
-        @change-tool-to-rectangle="changeToolToRectangle"
-        @change-tool-to-circle="changeToolToCircle"
-        @change-tool-to-line="changeToolToLine"
-        @change-tool-to-star="changeToolToStar"
-        @change-tool-to-polygon="changeToolToPolygon"
-        @change-tool-to-eraser="changeToolToEraser"
+        @change-current-tool="changeCurrentTool"
         @undo-last="undoLast"
         @redo-last="redoLast"
         @reset-canvas="clearCanvas"
@@ -69,31 +63,7 @@ const {
   redoLast
 } = usePaint(color, lineWidth, tool, fillFigure, numberOfSides)
 
-function changeToolToBrush(newTool: string) {
-  tool.value = newTool
-}
-
-function changeToolToRectangle(newTool: string) {
-  tool.value = newTool
-}
-
-function changeToolToCircle(newTool: string) {
-  tool.value = newTool
-}
-
-function changeToolToLine(newTool: string) {
-  tool.value = newTool
-}
-
-function changeToolToStar(newTool: string) {
-  tool.value = newTool
-}
-
-function changeToolToPolygon(newTool: string) {
-  tool.value = newTool
-}
-
-function changeToolToEraser(newTool: string) {
+function changeCurrentTool(newTool: string) {
   tool.value = newTool
 }
 

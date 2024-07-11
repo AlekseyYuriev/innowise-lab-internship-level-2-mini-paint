@@ -3,40 +3,12 @@
     <div class="toolbar__buttons">
       <div class="toolbar__buttons-wrapper">
         <button
-          @click="changeToolToBrush"
-          class="toolbar__button brush"
-          :class="{ active: currentTool === 'brush' }"
-        ></button>
-        <button
-          @click="changeToolToRectangle"
-          class="toolbar__button rectangle"
-          :class="{ active: currentTool === 'rectangle' }"
-        ></button>
-        <button
-          @click="changeToolToCircle"
-          class="toolbar__button circle"
-          :class="{ active: currentTool === 'circle' }"
-        ></button>
-        <button
-          @click="changeToolToLine"
-          class="toolbar__button line"
-          :class="{ active: currentTool === 'line' }"
-        ></button>
-        <button
-          @click="changeToolToStar"
-          class="toolbar__button star"
-          :class="{ active: currentTool === 'star' }"
-        ></button>
-        <button
-          @click="changeToolToPolygon"
-          class="toolbar__button polygon"
-          :class="{ active: currentTool === 'polygon' }"
-        ></button>
-        <button
-          @click="changeToolToEraser"
-          class="toolbar__button eraser"
-          :class="{ active: currentTool === 'eraser' }"
-        ></button>
+          v-for="item in toolItems"
+          :key="item"
+          class="toolbar__button"
+          :class="currentTool === `${item}` ? `active + ${item}` : `${item}`"
+          @:click="changeTool(`${item}`)"
+        />
       </div>
 
       <div class="toolbar__buttons-wrapper">
@@ -110,14 +82,18 @@ const line = ref<number>(5)
 const sides = ref<number>(5)
 const currentTool = ref<string>('brush')
 
+const toolItems: string[] = [
+  'brush',
+  'rectangle',
+  'circle',
+  'line',
+  'star',
+  'polygon',
+  'eraser'
+]
+
 const emit = defineEmits({
-  changeToolToBrush: null,
-  changeToolToRectangle: null,
-  changeToolToCircle: null,
-  changeToolToLine: null,
-  changeToolToStar: null,
-  changeToolToPolygon: null,
-  changeToolToEraser: null,
+  changeCurrentTool: null,
   undoLast: null,
   redoLast: null,
   resetCanvas: null,
@@ -128,39 +104,9 @@ const emit = defineEmits({
   changeNumberOfSides: null
 })
 
-function changeToolToBrush() {
-  currentTool.value = 'brush'
-  emit('changeToolToBrush', 'brush')
-}
-
-function changeToolToRectangle() {
-  currentTool.value = 'rectangle'
-  emit('changeToolToRectangle', 'rectangle')
-}
-
-function changeToolToCircle() {
-  currentTool.value = 'circle'
-  emit('changeToolToCircle', 'circle')
-}
-
-function changeToolToLine() {
-  currentTool.value = 'line'
-  emit('changeToolToLine', 'line')
-}
-
-function changeToolToStar() {
-  currentTool.value = 'star'
-  emit('changeToolToStar', 'star')
-}
-
-function changeToolToPolygon() {
-  currentTool.value = 'polygon'
-  emit('changeToolToPolygon', 'polygon')
-}
-
-function changeToolToEraser() {
-  currentTool.value = 'eraser'
-  emit('changeToolToEraser', 'eraser')
+function changeTool(tool: string) {
+  currentTool.value = tool
+  emit('changeCurrentTool', tool)
 }
 
 function undoLast() {
