@@ -46,8 +46,11 @@
         </div>
       </div>
       <div class="toolbar__buttons-wrapper">
-        <fill-style-checkbox
-          @change-fill-figure-style="changeFillFigureStyle"
+        <AppCheckbox
+          :title="'Fill Figure'"
+          :id="'fill'"
+          v-model="fill"
+          :theme="false"
         />
         <div class="toolbar__side">
           <label for="sides">Number of sides:</label>
@@ -74,8 +77,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import FillStyleCheckbox from './FillStyleCheckbox.vue'
+import { ref, watch } from 'vue'
+import AppCheckbox from './AppCheckbox.vue'
+
+const fill = ref<boolean>(false)
 
 const color = ref<string>('#000000')
 const line = ref<number>(5)
@@ -138,8 +143,12 @@ function changeNumberOfSides() {
 }
 
 function saveImage() {
-  emit('saveImage')
+  emit('saveImage', true)
 }
+
+watch(fill, (newValue) => {
+  changeFillFigureStyle(newValue)
+})
 </script>
 
 <style scoped>

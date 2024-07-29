@@ -1,6 +1,11 @@
 <template>
   <nav class="navbar">
-    <theme-checkbox />
+    <AppCheckbox
+      title="Theme"
+      id="theme"
+      v-model="theme"
+      :theme="authStore.themeDark"
+    />
     <div class="navbar__content">
       <template v-if="!authStore.user">
         <div class="navbar__title-wrapper">
@@ -35,14 +40,16 @@
 </template>
 
 <script setup lang="ts">
+import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/AuthStore'
-import ThemeCheckbox from './ThemeCheckbox.vue'
-import { computed } from 'vue'
+import AppCheckbox from './AppCheckbox.vue'
 
-const authStore = useAuthStore()
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
+
+const theme = ref<boolean>(authStore.themeDark)
 
 const handleLogout = async (): Promise<void> => {
   await authStore.logoutUser()
@@ -59,6 +66,10 @@ const handleButtonText = computed<string>(() => {
     route.fullPath === '/register'
     ? '+Create new picture'
     : '←Back to Gallery'
+})
+
+watch(theme, (newValue) => {
+  authStore.changeTheme(newValue)
 })
 </script>
 

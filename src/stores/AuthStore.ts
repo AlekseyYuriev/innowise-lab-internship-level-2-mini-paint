@@ -1,8 +1,9 @@
-import { auth } from '@/firebase/config'
-import { login, logout, register } from '@/services/auth'
-import { onAuthStateChanged } from 'firebase/auth'
-import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { defineStore } from 'pinia'
+import { auth } from '@/firebase/config'
+import { onAuthStateChanged } from 'firebase/auth'
+import { login, logout, register } from '@/services/auth'
+import { isThemeDark } from '@/utils/theme'
 
 export interface User {
   email: string | null
@@ -12,7 +13,7 @@ export interface User {
 export const useAuthStore = defineStore('authStore', () => {
   const user = ref<User | null>(null)
   const authIsReady = ref<boolean>(false)
-  const themeDark = ref<boolean>(true)
+  const themeDark = ref<boolean>(isThemeDark())
 
   const init = () => {
     onAuthStateChanged(auth, (userDetails) => {
@@ -37,6 +38,18 @@ export const useAuthStore = defineStore('authStore', () => {
     await logout()
   }
 
+  const changeTheme = (isThemeDark: boolean) => {
+    if (isThemeDark) {
+      themeDark.value = isThemeDark
+      localStorage.setItem('theme', 'dark')
+      document.body.classList.add('dark')
+    } else {
+      themeDark.value = isThemeDark
+      localStorage.setItem('theme', 'light')
+      document.body.classList.remove('dark')
+    }
+  }
+
   return {
     init,
     registerUser,
@@ -44,6 +57,7 @@ export const useAuthStore = defineStore('authStore', () => {
     logoutUser,
     user,
     authIsReady,
-    themeDark
+    themeDark,
+    changeTheme
   }
 })

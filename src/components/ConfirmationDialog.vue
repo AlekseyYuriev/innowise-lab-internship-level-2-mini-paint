@@ -37,7 +37,7 @@ const emit = defineEmits({
 })
 
 const closeDialog = () => {
-  emit('hideDialog')
+  emit('hideDialog', false)
 }
 
 function hideDialogOnButton(evt: KeyboardEvent) {

@@ -69,9 +69,9 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/AuthStore'
 import useVuelidate from '@vuelidate/core'
 import { required, minLength, email, helpers } from '@vuelidate/validators'
-import { useAuthStore } from '../stores/AuthStore'
 import {
   EMAIL_REQUIRED_FIELD,
   EMAIL_TYPE_FIELD,

@@ -21,14 +21,7 @@
         <div class="gallery__item-description">
           <p class="gallery__author">Created by {{ item.userEmail }}</p>
           <p class="gallery__created-date">
-            {{
-              new Date(item.timestamp)
-                .toISOString()
-                .split('T')[0]
-                .split('-')
-                .reverse()
-                .join('-')
-            }}
+            {{ handleDateFormat(item.timestamp) }}
           </p>
         </div>
         <img
@@ -78,6 +71,15 @@ onMounted(async () => {
   pictures.splice(0, pictures.length, ...(galleryPictures as []))
   isLoading.value = false
 })
+
+const handleDateFormat = (incomingTimestamp: number) => {
+  return new Date(incomingTimestamp)
+    .toISOString()
+    .split('T')[0]
+    .split('-')
+    .reverse()
+    .join('-')
+}
 </script>
 
 <style scoped>

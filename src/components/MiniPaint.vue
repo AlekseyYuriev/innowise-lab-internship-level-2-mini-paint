@@ -6,7 +6,7 @@
         @undo-last="undoLast"
         @redo-last="redoLast"
         @reset-canvas="clearCanvas"
-        @save-image="showConfirmationDialog"
+        @save-image="handleConfirmationDialog"
         @change-color="changeColor"
         @change-line-width="changeLineWidth"
         @change-fill-figure-style="changeFillFigureStyle"
@@ -27,7 +27,7 @@
   </main>
   <confirmation-dialog
     v-if="confirm"
-    @hide-dialog="hideConfirmationDialog"
+    @hide-dialog="handleConfirmationDialog"
     @save-image="saveImage"
     :isLoading="isLoading"
   />
@@ -36,10 +36,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import ToolBar from '@/components/ToolBar.vue'
-import usePaint from '@/composables/usePaint'
 import { useAuthStore } from '@/stores/AuthStore'
+import usePaint from '@/composables/usePaint'
 import { savePicture } from '@/services/pictures'
+import ToolBar from '@/components/ToolBar.vue'
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue'
 
 const authStore = useAuthStore()
@@ -67,10 +67,6 @@ function changeCurrentTool(newTool: string) {
   tool.value = newTool
 }
 
-const showConfirmationDialog = () => {
-  confirm.value = true
-}
-
 function saveImage() {
   if (!canvas.value || !authStore.user || !authStore.user.email) return
   isLoading.value = true
@@ -80,7 +76,7 @@ function saveImage() {
   savePicture(authStore.user.email, dateTimestamp, imageData)
 
   isLoading.value = false
-  hideConfirmationDialog()
+  handleConfirmationDialog(false)
   router.push('/')
 }
 
@@ -100,8 +96,8 @@ function changeNumberOfSides(sides: number) {
   numberOfSides.value = sides
 }
 
-const hideConfirmationDialog = () => {
-  confirm.value = false
+function handleConfirmationDialog(status: boolean) {
+  confirm.value = status
 }
 </script>
 

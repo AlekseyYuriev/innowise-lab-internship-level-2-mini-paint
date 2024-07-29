@@ -21,25 +21,25 @@
   --text-calendar-day-color-lite: #838383;
   --border-bottom-color-lite: #dcdcdc;
 
-  --color-body-background: var(--body-color-dark);
-  --color-container-background: var(--deep-blue);
-  --color-add-dialog-background: var(--background-add-dialog-color-dark);
-  --color-text-main: var(--deep-green);
-  --color-button-background: var(--background-button-color-dark);
-  --color-button-text: var(--text-button-color-dark);
-  --color-input-background: var(--background-input-color-dark);
-  --color-input-outline: var(--deep-blue);
-  --color-task-item: var(--green);
-  --color-calendar-scrollbar-background: var(--deep-blue);
-  --color-calendar-scrollbar: var(--deep-green);
-  --color-calendar-item-background: var(--background-calendar-item-color-dark);
-  --color-calendar-day-text: var(--green);
-  --color-calendar-date-text: var(--green);
-  --color-calendar-button-active: var(--green);
-  --color-calendar-button-text-active: var(--deep-blue);
-  --color-calendar-button-hover: var(--text-button-color-dark);
-  --color-border-bottom: var(--green);
-  --color-button-outline: var(--deep-blue);
+  --color-body-background: var(--body-color-light);
+  --color-container-background: var(--white);
+  --color-add-dialog-background: var(--background-add-dialog-color-lite);
+  --color-text-main: var(--main-text-color-lite);
+  --color-button-background: var(--orange);
+  --color-button-text: var(--white);
+  --color-input-background: var(--white);
+  --color-input-outline: var(--gray);
+  --color-task-item: var(--black);
+  --color-calendar-scrollbar-background: var(--white);
+  --color-calendar-scrollbar: var(--gray);
+  --color-calendar-item-background: var(--white);
+  --color-calendar-day-text: var(--text-calendar-day-color-lite);
+  --color-calendar-date-text: var(--black);
+  --color-calendar-button-active: var(--black);
+  --color-calendar-button-text-active: var(--white);
+  --color-calendar-button-hover: var(--orange);
+  --color-border-bottom: var(--border-bottom-color-lite);
+  --color-button-outline: var(--gray);
 }
 
 .light {
