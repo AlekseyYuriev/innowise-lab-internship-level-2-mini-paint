@@ -39,12 +39,12 @@ export const useAuthStore = defineStore('authStore', () => {
   }
 
   const changeTheme = (isThemeDark: boolean) => {
+    themeDark.value = isThemeDark
+
     if (isThemeDark) {
-      themeDark.value = isThemeDark
       localStorage.setItem('theme', 'dark')
       document.body.classList.add('dark')
     } else {
-      themeDark.value = isThemeDark
       localStorage.setItem('theme', 'light')
       document.body.classList.remove('dark')
     }

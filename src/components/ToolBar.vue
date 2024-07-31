@@ -6,8 +6,8 @@
           v-for="item in toolItems"
           :key="item"
           class="toolbar__button"
-          :class="currentTool === `${item}` ? `active + ${item}` : `${item}`"
-          @:click="changeTool(`${item}`)"
+          :class="currentTool === item ? `active ${item}` : item"
+          @:click="changeTool(item)"
         />
       </div>
 
