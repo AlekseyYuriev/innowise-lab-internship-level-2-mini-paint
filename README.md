@@ -1,39 +1,48 @@
-# innowise-lab-internship-level-2-mini-paint
+<h1>Innowise lab internship level 2 Mini Paint</h1>
 
-This template should help get you started developing with Vue 3 in Vite.
+<h2>1. Link to the task</h2>
 
-## Recommended IDE Setup
+https://drive.google.com/file/d/19cb4whI_HUVPzuaPyaj5r6hGotIVnhho/view
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+<h2>2. How to run the app</h2>
 
-## Type Support for `.vue` Imports in TS
+- `git clone https://github.com/AlekseyYuriev/innowise-lab-internship-level-2-mini-paint.git` - clone the repository (HTTPS)
+- `npm install` - install the dependencies
+- `npm run dev` - run the app
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+<h2>3. Database snapshot</h2>
+All saved images are sent to storage. The storage structure in firebase is organized the following way:
 
-## Customize configuration
+<br>
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+<img width="600" src="./public/firebase1.png" alt="Firebase Data Structure">
+<img width="600" src="./public/firebase2.png" alt="Firebase Data Structure">
+<img width="600" src="./public/firebase3.png" alt="Firebase Data Structure">
 
-## Project Setup
+<h2>4. Application stack and description of the file structure</h2>
 
-```sh
-npm install
-```
+The App is a Vue 3 based application. It was created using composition API. The App includes several additional libraries:
 
-### Compile and Hot-Reload for Development
+- Vue Router for routing
+- Pinia - officially recommended state management library
+- Vuelidate for form validation
+- Firebase - as a backend of the app
 
-```sh
-npm run dev
-```
+The App has the following file structure:
 
-### Type-Check, Compile and Minify for Production
+1. In the <strong>root</strong> folder you can find files that are used to configure and develop the app and <strong>index.html</strong> file.
+   <br>
+2. <strong>src</strong> folder contains the files of the app including <strong>main.js, App.vue</strong> and several folders:
 
-```sh
-npm run build
-```
+- `assets` - folder with basic CSS files and svg icons
+- `components` - folder with Vue Components of the App
+- `composables` - folder with composables functions responsible for the logic of mini paint
+- `firebase` - folder with firebase configuration file
+- `router` - folder with Vue Router configuration file
+- `services` - folder with the file responsible for requests to Firebase
+- `store` - folder with Pinia storage configuration file
+- `views` - folder with the pages of the App
 
-### Lint with [ESLint](https://eslint.org/)
+<h2>5. Link to the deployed app</h2>
 
-```sh
-npm run lint
-```
+https://mini-paint-5883c.web.app

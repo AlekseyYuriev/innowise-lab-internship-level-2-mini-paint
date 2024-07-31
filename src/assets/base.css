@@ -1,71 +1,94 @@
-/* color palette from <https://github.com/vuejs/theme> */
 :root {
-  --vt-c-white: #ffffff;
-  --vt-c-white-soft: #f8f8f8;
-  --vt-c-white-mute: #f2f2f2;
+  --white: #fff;
+  --deep-blue: #051039;
+  --deep-green: #248280;
+  --green: #4f9b99;
+  --black: #000;
+  --orange: #fe8c2c;
+  --gray: #d9d9d9;
 
-  --vt-c-black: #181818;
-  --vt-c-black-soft: #222222;
-  --vt-c-black-mute: #282828;
+  --body-color-light: #e8e8ea;
+  --body-color-dark: #638aa8;
 
-  --vt-c-indigo: #2c3e50;
+  --background-add-dialog-color-lite: rgba(220, 220, 220, 0.5);
+  --background-add-dialog-color-dark: rgba(99, 138, 168, 0.5);
 
-  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
-  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
+  --main-text-color-lite: #545454;
+  --background-button-color-dark: #c15a47;
+  --text-button-color-dark: #39c6d2;
+  --background-input-color-dark: #b1c4d3;
+  --background-calendar-item-color-dark: #feae6b;
+  --text-calendar-day-color-lite: #838383;
+  --border-bottom-color-lite: #dcdcdc;
 
-  --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-  --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+  --color-body-background: var(--body-color-light);
+  --color-container-background: var(--white);
+  --color-add-dialog-background: var(--background-add-dialog-color-lite);
+  --color-text-main: var(--main-text-color-lite);
+  --color-button-background: var(--orange);
+  --color-button-text: var(--white);
+  --color-input-background: var(--white);
+  --color-input-outline: var(--gray);
+  --color-task-item: var(--black);
+  --color-calendar-scrollbar-background: var(--white);
+  --color-calendar-scrollbar: var(--gray);
+  --color-calendar-item-background: var(--white);
+  --color-calendar-day-text: var(--text-calendar-day-color-lite);
+  --color-calendar-date-text: var(--black);
+  --color-calendar-button-active: var(--black);
+  --color-calendar-button-text-active: var(--white);
+  --color-calendar-button-hover: var(--orange);
+  --color-border-bottom: var(--border-bottom-color-lite);
+  --color-button-outline: var(--gray);
 }
 
-/* semantic color variables for this project */
-:root {
-  --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
-
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
-
-  --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
-
-  --section-gap: 160px;
+.light {
+  --color-body-background: var(--body-color-light);
+  --color-container-background: var(--white);
+  --color-add-dialog-background: var(--background-add-dialog-color-lite);
+  --color-text-main: var(--main-text-color-lite);
+  --color-button-background: var(--orange);
+  --color-button-text: var(--white);
+  --color-input-background: var(--white);
+  --color-input-outline: var(--gray);
+  --color-task-item: var(--black);
+  --color-calendar-scrollbar-background: var(--white);
+  --color-calendar-scrollbar: var(--gray);
+  --color-calendar-item-background: var(--white);
+  --color-calendar-day-text: var(--text-calendar-day-color-lite);
+  --color-calendar-date-text: var(--black);
+  --color-calendar-button-active: var(--black);
+  --color-calendar-button-text-active: var(--white);
+  --color-calendar-button-hover: var(--orange);
+  --color-border-bottom: var(--border-bottom-color-lite);
+  --color-button-outline: var(--gray);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
-
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
-
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: var(--vt-c-text-dark-2);
-  }
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  font-weight: normal;
+.dark {
+  --color-body-background: var(--body-color-dark);
+  --color-container-background: var(--deep-blue);
+  --color-add-dialog-background: var(--background-add-dialog-color-dark);
+  --color-text-main: var(--deep-green);
+  --color-button-background: var(--background-button-color-dark);
+  --color-button-text: var(--text-button-color-dark);
+  --color-input-background: var(--background-input-color-dark);
+  --color-input-outline: var(--deep-blue);
+  --color-task-item: var(--green);
+  --color-calendar-scrollbar-background: var(--deep-blue);
+  --color-calendar-scrollbar: var(--deep-green);
+  --color-calendar-item-background: var(--background-calendar-item-color-dark);
+  --color-calendar-day-text: var(--green);
+  --color-calendar-date-text: var(--green);
+  --color-calendar-button-active: var(--green);
+  --color-calendar-button-text-active: var(--deep-blue);
+  --color-calendar-button-hover: var(--text-button-color-dark);
+  --color-border-bottom: var(--green);
+  --color-button-outline: var(--deep-blue);
 }
 
 body {
   min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
-  line-height: 1.6;
+  background: var(--color-body-background);
   font-family:
     Inter,
     -apple-system,
@@ -79,8 +102,10 @@ body {
     'Droid Sans',
     'Helvetica Neue',
     sans-serif;
-  font-size: 15px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
 }
